@@ -19,6 +19,7 @@ from StringIO import StringIO
 import urllib, cStringIO
 from urllib import *
 import json
+import git
 
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
@@ -168,6 +169,8 @@ class Ui_MainWindow2(QtGui.QMainWindow):
         context = json.loads(context)
         for repo in context:
             liste.addItem(repo['name'])
+     #   self.connect(self.listWidget_2, SIGNAL("itemSelectionChanged()"), self.clone)
+            
         
         self.setCentralWidget(self.centralwidget)
         self.menubar = QtGui.QMenuBar(self)
@@ -179,11 +182,38 @@ class Ui_MainWindow2(QtGui.QMainWindow):
         self.setStatusBar(self.statusbar)
 
         self.retranslateUi(self)
-        
+        QtCore.QObject.connect(self.listWidget_2, QtCore.SIGNAL(_fromUtf8("itemSelectionChanged()")), self.clone)
+
+
         QtCore.QObject.connect(self.pushButton_2, QtCore.SIGNAL(_fromUtf8("clicked()")), self.close)
         QtCore.QMetaObject.connectSlotsByName(self)
-     
-     
+     def clone(self,item):
+        print "hey"
+        user = self.github.user()
+        #items = self.listWidget.selectedItems()
+        url = user.repos_url
+        context = urllib.urlopen(url)
+        context = context.read()
+        context = json.loads(context)
+        print "devam"
+        for repo in context:
+            print "sorun yok burada da"
+            repo = repo['name']
+            print "heeey gectin burayi da"
+            #items = self.listWidget.selectedItems()
+            print ":("
+            #print items
+           # for i in range(len(items)):
+            #       print "dedevam"
+            #clone_url = str(self.listWidget_2.selectedItems().text())
+            selectItem = self.listWidget_2.currentItem().text()
+            
+            print selectItem
+            if selectItem == repo:
+                 
+                  git.Git().clone(repo['clone_url'])   
+                  print "clone yapildi"
+            
      def retranslateUi(self, MainWindow):
         MainWindow.setWindowTitle(QtGui.QApplication.translate("MainWindow", "MainWindow", None, QtGui.QApplication.UnicodeUTF8))
         self.label.setText(QtGui.QApplication.translate("MainWindow", "<html><head/><body><p><span style=\" font-size:16pt; font-weight:600;\">Find Local Repositories</span></p></body></html>", None, QtGui.QApplication.UnicodeUTF8))

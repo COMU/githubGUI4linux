@@ -20,6 +20,8 @@ import urllib, cStringIO
 from urllib import *
 import json
 import git
+import urllib2
+from auth4 import *
 
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
@@ -33,9 +35,20 @@ class github:
                 self.ui = ui
         def user(self):
                 gh = GitHub()
-                edit = ui.lineEdit.text()
-
-                user = gh.users(edit).get()
+                edit_name = ui.lineEdit.text()
+                edit_passwd = ui.lineEdit_2.text()
+                print edit_name
+                user = gh.users(edit_name).get()
+                userData = (edit_name + ":" + edit_passwd).encode("base64").rstrip()
+                req = urllib2.Request('https://api.github.com/users/braitsch')
+          
+                req.add_header('Accept', 'application/json')
+                req.add_header("Content-type", "application/x-www-form-urlencoded")
+        
+                req.add_header('Authorization', userData)
+        
+                res = urllib2.urlopen(req)
+                 
                 return user
 
 
@@ -87,6 +100,7 @@ class Ui_MainWindow(QtGui.QMainWindow):
         self.statusbar.setObjectName(_fromUtf8("statusbar"))
         self.setStatusBar(self.statusbar)
         
+#        self.github = github(self)
         
  
         self.retranslateUi(self)
@@ -102,7 +116,7 @@ class Ui_MainWindow(QtGui.QMainWindow):
     def open_window(self):
          self.close()
          self.new = Ui_MainWindow2()
-
+         #self.github.user()
          self.new.show()
 
  

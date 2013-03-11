@@ -141,7 +141,8 @@ class Ui_MainWindow2(QtGui.QMainWindow):
         self.pushButton_2.setObjectName(_fromUtf8("pushButton_2"))
         self.listWidget = QtGui.QListWidget(self.centralwidget)
         self.listWidget.setGeometry(QtCore.QRect(50, 120, 151, 111))
-        self.listWidget.setObjectName(_fromUtf8("listWidget"))     
+        self.listWidget.setObjectName(_fromUtf8("listWidget"))
+        self.listWidget.resize(30,15)     
         #disarida tanimlanmis bir fonksiyon cagriliyor
         self.Ui_MainWindow = Ui_MainWindow()
 
@@ -187,7 +188,7 @@ class Ui_MainWindow2(QtGui.QMainWindow):
 
         QtCore.QObject.connect(self.pushButton_2, QtCore.SIGNAL(_fromUtf8("clicked()")), self.close)
         QtCore.QMetaObject.connectSlotsByName(self)
-     def clone(self,item):
+     def clone(self):
         print "hey"
         user = self.github.user()
         #items = self.listWidget.selectedItems()
@@ -195,23 +196,28 @@ class Ui_MainWindow2(QtGui.QMainWindow):
         context = urllib.urlopen(url)
         context = context.read()
         context = json.loads(context)
-        print "devam"
+        #print "devam"
         for repo in context:
             print "sorun yok burada da"
-            repo = repo['name']
-            print "heeey gectin burayi da"
+            repo_name = repo['name']
+            print repo_name
+            #print "heeey gectin burayi da"
             #items = self.listWidget.selectedItems()
-            print ":("
+            #print ":("
             #print items
-           # for i in range(len(items)):
+            #for i in range(len(items)):
             #       print "dedevam"
             #clone_url = str(self.listWidget_2.selectedItems().text())
+            #for repo in :
+                    
             selectItem = self.listWidget_2.currentItem().text()
             
             print selectItem
-            if selectItem == repo:
-                 
-                  git.Git().clone(repo['clone_url'])   
+            if selectItem == repo_name:
+                  print repo['clone_url']
+              
+                  git.Git().clone(repo['clone_url'])
+                    
                   print "clone yapildi"
             
      def retranslateUi(self, MainWindow):

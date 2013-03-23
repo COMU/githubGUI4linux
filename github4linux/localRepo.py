@@ -48,6 +48,9 @@ class Ui_MainWindow(object):
         self.statusbar.setObjectName(_fromUtf8("statusbar"))
         MainWindow.setStatusBar(self.statusbar)
 
+	# .git uzantili dosyalari bulma islemi burada yapiliyor.
+	# Eger dosya bulunuyorsa deponun ismini diziden cekip arayuzde gosteriyoruz.
+
 	local_repos_name = commands.getoutput('find ~ -type d -name .git')
 	repos_name = local_repos_name.split("/")
 	repos_name_array = []
@@ -59,6 +62,16 @@ class Ui_MainWindow(object):
 		if repos_name_array[i] == ".git" or repos_name_array[i] == ".git\n":
 			self.listWidget.addItem(repos_name_array[i-1])
 		i +=1
+
+	# program kuruldugunda, kullanicinin yerelinde otomatik olarak bir dizin olusturuluyor
+	
+	home = commands.getoutput('~/') # kullanicinin home dizinini buluruz.
+	home_name = home.split(" ")
+	home_name = home_name[2].split(":")	
+	home = home_name[0]
+	
+	direc = commands.getstatusoutput('mkdir '+home+'/GitHubLINUX') # GitHubLINUX isminde bir dizin olusur arka planda. eger bu dizin daha onceden varsa ayni dizinden bir daha olusturulmayacaktir.
+	
 
 	self.retranslateUi(MainWindow)
         QtCore.QObject.connect(self.pushButton_2, QtCore.SIGNAL(_fromUtf8("clicked()")), MainWindow.close)

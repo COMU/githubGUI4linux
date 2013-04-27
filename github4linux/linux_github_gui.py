@@ -101,6 +101,14 @@ class Ui_MainWindow(QtGui.QMainWindow):
         self.label = QtGui.QLabel(self.tab)
         self.label.setGeometry(QtCore.QRect(20, 30, 141, 201))
 
+       # self.frame_2 = QtGui.QFrame(self.tab)
+       # self.frame_2.setGeometry(QtCore.QRect(20,80,361,80))
+       # self.frame_2.setFrameShape(QtGui.QFrame.StyledPanel)
+       # self.frame_2.setFrameShadow(QtGui.QFrame.Raised)
+       # self.frame_2.setObjectName(_fromUtf8("frame_2"))
+       # self.label_2 = QtGui.QLabel(self.frame_2)
+       # self.label_2.setGeometry(QtCore.QRect(20,30,362,70))
+       # self.label_2.setObjectName(_fromUtf8("label_2"))
 
         self.setCentralWidget(self.centralwidget)
         self.menubar = QtGui.QMenuBar(self)
@@ -117,7 +125,54 @@ class Ui_MainWindow(QtGui.QMainWindow):
 	
 	self.connect(self.comboBox, QtCore.SIGNAL('activated(QString)'), self.combo_chosen)
     def combo_chosen(self,text):
-	self.label.setText(text)
+	print text
+        x = 141
+        y1 = 80
+	y2 = 60	
+
+	self.github = github(self)
+        user = self.github.user()
+ 
+        #event_url = "https://api.github.com/repos/"+user.login+"/"+text+"/events" 
+	
+	event_url ="https://api.github.com/repos/nyucel/learnyouahaskell/events"   
+        #print event_url
+	event_icerik = urllib.urlopen(event_url)
+	print event_icerik
+	event_icerik = event_icerik.read()
+	event_icerik = json.loads(event_icerik)
+
+	#self.label.setText(text)
+	for event in event_icerik:
+	   
+	   for k in event:
+	       print "event"
+	       if k=='payload':
+		  print "payload"	
+		  if 'commits' in event[k].keys():
+                            print "commit"			
+			#if 'message' in event[k]['commits']:
+			    for c in event[k]['commits']:
+				text2 = c['message']
+                                self.addlabel(y1,y2,text2)
+		
+				#self.label.show()                    
+           			y1 = y1 +50
+				y2 = y2 +50
+          			
+    def addlabel(self,y1,y2,text2):
+	self.frame_2 = QtGui.QFrame(self.tab)
+        self.frame_2.setGeometry(QtCore.QRect(20,80,361,y1))
+        self.frame_2.setFrameShape(QtGui.QFrame.StyledPanel)
+        self.frame_2.setFrameShadow(QtGui.QFrame.Raised)
+        self.frame_2.setObjectName(_fromUtf8("frame_2"))
+
+	self.label2 = QtGui.QLabel(self.frame_2)
+        self.label2.setGeometry(QtCore.QRect(20,80,370,y2 )) 
+	self.label2.setText(text2)
+	self.frame_2.show()
+	self.label2.show()
+	
     def retranslateUi(self, MainWindow):
         MainWindow.setWindowTitle(QtGui.QApplication.translate("MainWindow", "MainWindow", None, QtGui.QApplication.UnicodeUTF8))
         #self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), QtGui.QApplication.translate("MainWindow", "Tab 1", None, QtGui.QApplication.UnicodeUTF8))

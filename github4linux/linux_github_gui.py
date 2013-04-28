@@ -149,9 +149,10 @@ class Ui_MainWindow(QtGui.QMainWindow):
         
 	#self.label.setText(text)
 	for event in event_icerik:
+          
 	   
 	   for k in event:
-	       #print k
+	       
 	       if k=='payload':
 		  
 		  if 'commits' in event[k].keys():
@@ -160,31 +161,15 @@ class Ui_MainWindow(QtGui.QMainWindow):
 			    for c in event[k]['commits']:
 				text2 = c['message']
 				
-				url = c['url']
-				print url
+				url = c['url']	
 				url_icerik = urllib.urlopen(url)
 				url_icerik = url_icerik.read()
 			        url_icerik = json.loads(url_icerik)
-			        for icerik in url_icerik:
-				    for m in icerik:
-				       		
-                                       if m == 'author':
-					      
-					
-        			            
-					  
-						
-						picture = m['avatar_url']
-						print picture
-
-				 
-                                                self.addlabel(y1,y2,text2,x,a,x1,picture)
-		
-				#self.label.show()                    
-           			                y1 = y1 +1
-				                y2 = y2 +1
-				#x = x+100
-          		  	                a = a+30
+			        picture = url_icerik['author']['avatar_url']
+				self.addlabel(y1,y2,text2,x,a,x1,picture)                    
+           			y1 = y1 +1
+				y2 = y2 +1
+          		  	a = a+30
            			
            			
     def addlabel(self,y1,y2,text2,x,a,x1,picture):

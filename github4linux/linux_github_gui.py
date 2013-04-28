@@ -126,9 +126,13 @@ class Ui_MainWindow(QtGui.QMainWindow):
 	self.connect(self.comboBox, QtCore.SIGNAL('activated(QString)'), self.combo_chosen)
     def combo_chosen(self,text):
 	print text
-        x = 141
-        y1 = 80
+        #x = 141
+	x = 361
+	x1 = 370
+        y1 = 20
 	y2 = 60	
+	a = 40
+        
 
 	self.github = github(self)
         user = self.github.user()
@@ -138,38 +142,76 @@ class Ui_MainWindow(QtGui.QMainWindow):
 	event_url ="https://api.github.com/repos/nyucel/learnyouahaskell/events"   
         #print event_url
 	event_icerik = urllib.urlopen(event_url)
-	print event_icerik
+	#print event_icerik
 	event_icerik = event_icerik.read()
 	event_icerik = json.loads(event_icerik)
-
+	
+        
 	#self.label.setText(text)
 	for event in event_icerik:
 	   
 	   for k in event:
-	       print "event"
+	       #print k
 	       if k=='payload':
-		  print "payload"	
+		  
 		  if 'commits' in event[k].keys():
-                            print "commit"			
+                            			
 			#if 'message' in event[k]['commits']:
 			    for c in event[k]['commits']:
 				text2 = c['message']
-                                self.addlabel(y1,y2,text2)
+				
+				url = c['url']
+				print url
+				url_icerik = urllib.urlopen(url)
+				url_icerik = url_icerik.read()
+			        url_icerik = json.loads(url_icerik)
+			        for icerik in url_icerik:
+				    for m in icerik:
+				       		
+                                       if m == 'author':
+					      
+					
+        			            
+					  
+						
+						picture = m['avatar_url']
+						print picture
+
+				 
+                                                self.addlabel(y1,y2,text2,x,a,x1,picture)
 		
 				#self.label.show()                    
-           			y1 = y1 +50
-				y2 = y2 +50
-          			
-    def addlabel(self,y1,y2,text2):
+           			                y1 = y1 +1
+				                y2 = y2 +1
+				#x = x+100
+          		  	                a = a+30
+           			
+           			
+    def addlabel(self,y1,y2,text2,x,a,x1,picture):
 	self.frame_2 = QtGui.QFrame(self.tab)
-        self.frame_2.setGeometry(QtCore.QRect(20,80,361,y1))
+        self.frame_2.setGeometry(QtCore.QRect(10,a,x,y1))
         self.frame_2.setFrameShape(QtGui.QFrame.StyledPanel)
         self.frame_2.setFrameShadow(QtGui.QFrame.Raised)
         self.frame_2.setObjectName(_fromUtf8("frame_2"))
 
 	self.label2 = QtGui.QLabel(self.frame_2)
-        self.label2.setGeometry(QtCore.QRect(20,80,370,y2 )) 
+        #self.label2.setGeometry(QtCore.QRect(20,80,370,y2 )) 
 	self.label2.setText(text2)
+
+	self.listWidget = QtGui.QListWidget(self.frame_2)
+        #self.listWidget.setGeometry(QtCore.QRect(10, 360, 41, 31))
+        self.listWidget.setObjectName(_fromUtf8("listWidget"))
+        self.listWidget.resize(30,30)
+
+	imageUrl = urllib2.urlopen(picture)
+        imageData = imageUrl.read()
+        imageUrl.close()
+        image = QtGui.QPixmap()
+        image.loadFromData(imageData)
+        item = QtGui.QListWidgetItem(self.listWidget)
+        item.setIcon(QtGui.QIcon(image))
+
+	self.label2.move(50,0)
 	self.frame_2.show()
 	self.label2.show()
 	

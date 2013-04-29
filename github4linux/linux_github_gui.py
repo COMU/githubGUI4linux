@@ -60,7 +60,7 @@ class Ui_MainWindow(QtGui.QMainWindow):
         context = json.loads(context)
         
 	self.comboBox.clear()
-        self.comboBox.addItem("Repository")
+        self.comboBox.addItem("Repository List")
         for text in context:
     		self.comboBox.addItem(text['name'])
 
@@ -73,6 +73,7 @@ class Ui_MainWindow(QtGui.QMainWindow):
         self.tabWidget = QtGui.QTabWidget(self.centralwidget)
         self.tabWidget.setGeometry(QtCore.QRect(160, 30, 441, 451))
         self.tabWidget.setObjectName(_fromUtf8("tabWidget"))
+        
         icon1 = QtGui.QIcon()
         
 
@@ -86,30 +87,21 @@ class Ui_MainWindow(QtGui.QMainWindow):
 
         icon3.addPixmap(QtGui.QPixmap(_fromUtf8("/home/mehtap/BASLA/branch.jpeg")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
 
-	self.tab = QtGui.QWidget()
+        self.tab = QtGui.QWidget()
         self.tab.setObjectName(_fromUtf8("tab"))
+	    
         self.tab2 = QtGui.QWidget()
         self.tab2.setObjectName(_fromUtf8("tab2"))
 	self.tab3 = QtGui.QWidget()
         self.tab3.setObjectName(_fromUtf8("tab3"))
 
-	
+        
         self.tabWidget.addTab(self.tab,icon1, _fromUtf8("HıSTORY"))
         self.tabWidget.addTab(self.tab2,icon2,_fromUtf8("CHANGES"))
 	self.tabWidget.addTab(self.tab3,icon3, _fromUtf8("BRANCHES"))
-        
+         
         self.label = QtGui.QLabel(self.tab)
         self.label.setGeometry(QtCore.QRect(20, 30, 141, 201))
-
-       # self.frame_2 = QtGui.QFrame(self.tab)
-       # self.frame_2.setGeometry(QtCore.QRect(20,80,361,80))
-       # self.frame_2.setFrameShape(QtGui.QFrame.StyledPanel)
-       # self.frame_2.setFrameShadow(QtGui.QFrame.Raised)
-       # self.frame_2.setObjectName(_fromUtf8("frame_2"))
-       # self.label_2 = QtGui.QLabel(self.frame_2)
-       # self.label_2.setGeometry(QtCore.QRect(20,30,362,70))
-       # self.label_2.setObjectName(_fromUtf8("label_2"))
-
         self.setCentralWidget(self.centralwidget)
         self.menubar = QtGui.QMenuBar(self)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 800, 21))
@@ -121,25 +113,32 @@ class Ui_MainWindow(QtGui.QMainWindow):
 
         self.retranslateUi(self)
         QtCore.QMetaObject.connectSlotsByName(self)
-	
-	
+        
 	self.connect(self.comboBox, QtCore.SIGNAL('activated(QString)'), self.combo_chosen)
+
     def combo_chosen(self,text):
-	print text
-        #x = 141
+        self.tabWidget.clear()
+        self.tab = QtGui.QWidget()
+        self.tab.setObjectName(_fromUtf8("tab2"))
+
+        self.tab2 = QtGui.QWidget()
+        self.tab2.setObjectName(_fromUtf8("tab2"))
+        self.tab3 = QtGui.QWidget()
+        self.tab3.setObjectName(_fromUtf8("tab3"))
+
+ 	
+	
 	x = 361
 	x1 = 370
         y1 = 20
 	y2 = 60	
-	a = 40
-        
-
-	self.github = github(self)
+	a = 30
+        self.github = github(self)
         user = self.github.user()
- 
-        #event_url = "https://api.github.com/repos/"+user.login+"/"+text+"/events" 
+        print type(user.login)
+        event_url = "https://api.github.com/repos/"+str(user.login)+"/"+str(text)+"/events" 
 	
-	event_url ="https://api.github.com/repos/nyucel/learnyouahaskell/events"   
+	#event_url ="https://api.github.com/repos/nyucel/learnyouahaskell/events"   
         #print event_url
 	event_icerik = urllib.urlopen(event_url)
 	#print event_icerik
@@ -170,10 +169,17 @@ class Ui_MainWindow(QtGui.QMainWindow):
            			y1 = y1 +1
 				y2 = y2 +1
           		  	a = a+30
-           			
-           			
-    def addlabel(self,y1,y2,text2,x,a,x1,picture):
-	self.frame_2 = QtGui.QFrame(self.tab)
+                                          			
+       
+
+
+        self.tabWidget.addTab(self.tab, _fromUtf8("HıSTORY"))
+        self.tabWidget.addTab(self.tab2,_fromUtf8("CHANGES"))
+        self.tabWidget.addTab(self.tab3,_fromUtf8("BRANCHES"))
+   			
+    def addlabel(self,y1,y2,text2,x,a,x1,picture):   
+        	
+        self.frame_2 = QtGui.QFrame(self.tab)
         self.frame_2.setGeometry(QtCore.QRect(10,a,x,y1))
         self.frame_2.setFrameShape(QtGui.QFrame.StyledPanel)
         self.frame_2.setFrameShadow(QtGui.QFrame.Raised)
@@ -186,7 +192,7 @@ class Ui_MainWindow(QtGui.QMainWindow):
 	self.listWidget = QtGui.QListWidget(self.frame_2)
         #self.listWidget.setGeometry(QtCore.QRect(10, 360, 41, 31))
         self.listWidget.setObjectName(_fromUtf8("listWidget"))
-        self.listWidget.resize(30,30)
+        self.listWidget.resize(30,20)
 
 	imageUrl = urllib2.urlopen(picture)
         imageData = imageUrl.read()
@@ -196,10 +202,28 @@ class Ui_MainWindow(QtGui.QMainWindow):
         item = QtGui.QListWidgetItem(self.listWidget)
         item.setIcon(QtGui.QIcon(image))
 
+        self.listWidget2 = QtGui.QListWidget(self.frame_2)
+        #self.listWidget.setGeometry(QtCore.QRect(10, 360, 41, 31))
+        self.listWidget2.setObjectName(_fromUtf8("listWidget2"))
+        self.listWidget2.resize(30,20)
+
+        
+        
+        image2 = QtGui.QPixmap()
+        image2.loadFromData("ok.jpg")
+        item = QtGui.QListWidgetItem(self.listWidget2)
+        item.setIcon(QtGui.QIcon(image2))
+        self.listWidget2.setGeometry(QtCore.QRect(10, 30, 360, 20))
+
+#       self.label4 = QtGui.QLabel(self.frame_2)
+#	pixmap = QtGui.QPixmap("ok.jpg")
+#	self.label4.setPixmap(pixmap)
+#       self.label4.move(80,0) 
 	self.label2.move(50,0)
 	self.frame_2.show()
 	self.label2.show()
-	
+#       self.label4.show()
+        
     def retranslateUi(self, MainWindow):
         MainWindow.setWindowTitle(QtGui.QApplication.translate("MainWindow", "MainWindow", None, QtGui.QApplication.UnicodeUTF8))
         #self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), QtGui.QApplication.translate("MainWindow", "Tab 1", None, QtGui.QApplication.UnicodeUTF8))

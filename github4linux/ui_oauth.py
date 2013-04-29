@@ -10,7 +10,7 @@
 from PyQt4 import QtCore, QtGui, QtWebKit
 import sys
 import oauth2 as oauth
-import urllib
+import urllib, urllib2
 import urlparse
 from i18n import _
 from common import CONSUMER_KEY, CONSUMER_SECRET, HOST
@@ -26,21 +26,21 @@ class Ui_MainWindow(object):
     def __init__(self):
         super(Ui_MainWindow, self).__init__()
 
+# OAuth icin gizli ve acik anahtarlarin kullanimasi icin bos stringler olsturuldu
         self.oauth_token = ''
         self.oauth_secret = ''
 
-        self.loadUrl(QtCore.QUrl('http://github4linux.com/'))	
-#	self.show_all()
-    
+        self.loadUrl(QtCore.QUrl('http://github4linux.com/'))	# OAuth icin gizli ve acik key alirken main URL kismina girdigimiz kisim
+
     def loadUrl(self, url):
-	
+	# WebKit araciligi ile OAuth kullanarak kimlik kanitlamasi yapilmasi icin gerekenler
 	view = QtWebKit.QWebView()
 	view.connect(view, QtCore.SIGNAL('loadFinished(bool)'),self.webkit_navigation_callback)
 	view.load(url)
    
     def webkit_navigation_callback(self, frame, request, action, *args):
         url = action.get_uri()
-        if "github4linux" in url:
+        if "github4linux" in url: # url icinde daha onceden girdigimiz adres icindeki isim ile karsilasiyorsa (url icin "http://github4linux.com/" demistik) yapilmasi gerekenler
             self.hide()
 
             oauth_verifier = url.split('oauth_verifier=')[-1]
@@ -72,7 +72,6 @@ class Ui_MainWindow(object):
 
         return 'http://%s/OAuth.action?oauth_token=' % HOST + urllib.quote(data['oauth_token'])
 
-   
     def setupUi(self, MainWindow):
         MainWindow.setObjectName(_fromUtf8("MainWindow"))
         MainWindow.resize(800, 600)
@@ -107,6 +106,9 @@ class Ui_MainWindow(object):
         self.pushButton_2 = QtGui.QPushButton(self.centralwidget)
         self.pushButton_2.setGeometry(QtCore.QRect(380, 350, 98, 27))
         self.pushButton_2.setObjectName(_fromUtf8("pushButton_2"))
+	self.uyariLabel = QtGui.QLabel(self.centralwidget)
+        self.uyariLabel.setGeometry(QtCore.QRect(40, 320, 701, 17))
+        self.uyariLabel.setObjectName(_fromUtf8("uyariLabel"))
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtGui.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 800, 25))
@@ -118,11 +120,41 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
         QtCore.QObject.connect(self.pushButton_2, QtCore.SIGNAL(_fromUtf8("clicked()")), MainWindow.close)
-        QtCore.QMetaObject.connectSlotsByName(MainWindow)
+	QtCore.QObject.connect(self.pushButton,QtCore.SIGNAL("clicked()"),self.getUserData)
+        QtCore.QObject.connect(self.lineEdit,QtCore.SIGNAL("returnPressed()"),self.pushButton.animateClick)
+	QtCore.QObject.connect(self.lineEdit_2,QtCore.SIGNAL("returnPressed()"),self.pushButton.animateClick)
 
+	self.lineEdit_2.setEchoMode(QtGui.QLineEdit.Password)	# girilen parolanin gorulmesini engellemek icin
+
+	QtCore.QMetaObject.connectSlotsByName(MainWindow)
+
+# kullanici tarafindan arayuzden girilen kullanici adi ve parolasinin alinip boyle bir kullanicinin var olup olmadiginin sorusturulmasi
+
+    def getUserData(self):
+	uName = str(ui.lineEdit.text())
+	pWord = str(ui.lineEdit_2.text())
+	try:
+		userData = "Basic " + (uName + ":" + pWord).encode("base64").rstrip()
+
+        	req = urllib2.Request('https://api.github.com/users/braitsch')
+
+        	req.add_header('Accept', 'application/json')
+        	req.add_header("Content-type", "application/x-www-form-urlencoded")
+
+        	req.add_header('Authorization', userData)
+
+        	res = urllib2.urlopen(req)
+		print "authorization" 
+		ui.lineEdit.clear()
+		ui.lineEdit_2.clear()
+	except:
+		ui.uyariLabel.setText(u"internet baglantinizda ya da girdiginiz kullanici adi ve parolasinda hata bulunmaktadir. Kontrol ediniz!")
+		ui.lineEdit.clear()
+                ui.lineEdit_2.clear()
+	
     def retranslateUi(self, MainWindow):
         MainWindow.setWindowTitle(QtGui.QApplication.translate("MainWindow", "MainWindow", None, QtGui.QApplication.UnicodeUTF8))
-        self.label_2.setText(QtGui.QApplication.translate("MainWindow", "<html><head/><body><p align=\"center\"><span style=\" font-size:20pt; font-weight:600;\">Welcome To Github4Linux</span></p></body></html>", None, QtGui.QApplication.UnicodeUTF8))
+	self.label_2.setText(QtGui.QApplication.translate("MainWindow", "<html><head/><body><p align=\"center\"><span style=\" font-size:20pt; font-weight:600;\">Welcome To Github4Linux</span></p></body></html>", None, QtGui.QApplication.UnicodeUTF8))
         self.label_3.setText(QtGui.QApplication.translate("MainWindow", "<html><head/><body><p><span style=\" font-size:14pt; font-weight:600;\">connect to github</span></p></body></html>", None, QtGui.QApplication.UnicodeUTF8))
         self.label_4.setText(QtGui.QApplication.translate("MainWindow", "<html><head/><body><p>Github username or e-mail:</p></body></html>", None, QtGui.QApplication.UnicodeUTF8))
         self.label_5.setText(QtGui.QApplication.translate("MainWindow", "<html><head/><body><p>Password:</p></body></html>", None, QtGui.QApplication.UnicodeUTF8))

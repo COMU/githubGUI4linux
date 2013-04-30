@@ -37,44 +37,41 @@ class github:
 class Ui_MainWindow(QtGui.QMainWindow):
     def __init__(self):
         QtGui.QMainWindow.__init__(self)
-        self.setObjectName(_fromUtf8("MainWindow"))
-
-       
-        self.resize(800, 600)
+        self.setObjectName(_fromUtf8("Github4Linux"))
+        self.resize(800,600)
         self.centralwidget = QtGui.QWidget(self)
         self.centralwidget.setObjectName(_fromUtf8("centralwidget"))
-        self.frame_3 = QtGui.QFrame(self.centralwidget)
-        self.frame_3.setGeometry(QtCore.QRect(10, 30, 151, 451))
-        self.frame_3.setFrameShape(QtGui.QFrame.StyledPanel)
-        self.frame_3.setFrameShadow(QtGui.QFrame.Raised)
-        self.frame_3.setObjectName(_fromUtf8("frame_3"))
-        self.comboBox = QtGui.QComboBox(self.frame_3)
-        self.comboBox.setGeometry(QtCore.QRect(10, 30, 121, 24))
-        self.comboBox.setObjectName(_fromUtf8("comboBox"))   
+           
 	#githubtan depolar
 	self.github = github(self)
         user = self.github.user()
-        url = user.repos_url
-        context = urllib.urlopen(url)
+        repo_url = user.repos_url
+        context = urllib.urlopen(repo_url)
         context = context.read()
         context = json.loads(context)
-        repolistBox = QtGui.QTreeWidget(self.frame_3)
-        root = QtGui.QTreeWidgetItem(repolistBox, ["Repositor List"])
-        for text in context:
-	     repo = QtGui.QTreeWidgetItem(root, [text['name']])
-	repolistBox.show()
+	
+	organization_url = user.organizations_url
+	context2 = urllib.urlopen(organization_url)
+        context2 = context2.read()
+        context2 = json.loads(context2)
+ 
+	self.organizationlistBox = QtGui.QTreeWidget(self.centralwidget)
+	self.organizationlistBox.setGeometry(QtCore.QRect(10,250,150,200))
+        self.organizationlistBox.setHeaderLabels(["Organizationlist"])
+        root = QtGui.QTreeWidgetItem(self.organizationlistBox, ["Organizations"])
+        for organization_text in context2:
+             organization = QtGui.QTreeWidgetItem(root, [organization_text['login']])
+        self.organizationlistBox.show()
 
-	#self.comboBox.clear()
-        #self.comboBox.addItem("Repository List")
-        #for text in context:
-    	#	self.comboBox.addItem(text['name'])
-
-
-        #self.comboBox_2 = QtGui.QComboBox(self.frame_3)
-        #self.comboBox_2.setGeometry(QtCore.QRect(10, 100, 121, 24))
-        #self.comboBox_2.setObjectName(_fromUtf8("comboBox_2"))
-
-        	
+	
+        self.repolistBox = QtGui.QTreeWidget(self.centralwidget)
+	self.repolistBox.setGeometry(QtCore.QRect(10,30,150,200))
+	self.repolistBox.setHeaderLabels(["Repositorylist"])
+        root = QtGui.QTreeWidgetItem(self.repolistBox, ["Repositories"])
+        for repo_text in context:
+	     repo = QtGui.QTreeWidgetItem(root, [repo_text['name']])
+	self.repolistBox.show()
+	
         self.tabWidget = QtGui.QTabWidget(self.centralwidget)
         self.tabWidget.setGeometry(QtCore.QRect(160, 30, 441, 451))
         self.tabWidget.setObjectName(_fromUtf8("tabWidget"))
@@ -82,15 +79,15 @@ class Ui_MainWindow(QtGui.QMainWindow):
         icon1 = QtGui.QIcon()
         
 
- 	icon1.addPixmap(QtGui.QPixmap(_fromUtf8("/home/mehtap/BASLA/history.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+ 	icon1.addPixmap(QtGui.QPixmap(_fromUtf8("history.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         icon2 = QtGui.QIcon()
         
 
-        icon2.addPixmap(QtGui.QPixmap(_fromUtf8("/home/mehtap/BASLA/changes.jpg")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon2.addPixmap(QtGui.QPixmap(_fromUtf8("changes.jpg")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         icon3 = QtGui.QIcon()
         
 
-        icon3.addPixmap(QtGui.QPixmap(_fromUtf8("/home/mehtap/BASLA/branch.jpeg")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon3.addPixmap(QtGui.QPixmap(_fromUtf8("branch.jpeg")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
 
         self.tab = QtGui.QWidget()
         self.tab.setObjectName(_fromUtf8("tab"))
@@ -118,16 +115,26 @@ class Ui_MainWindow(QtGui.QMainWindow):
 
         self.retranslateUi(self)
         QtCore.QMetaObject.connectSlotsByName(self)
-        
-	self.connect(self.comboBox, QtCore.SIGNAL('activated(QString)'), self.combo_chosen)
+       
+	self.repolistBox.itemSelectionChanged.connect(self.displayItem)
+        self.repolistBox.itemSelectionChanged.connect(self.repoItem_chosen)
+	self.organizationlistBox.itemSelectionChanged.connect(self.organizationItem_chosen)
 
-    def combo_chosen(self,text):
+
+	
+    def displayItem(self):
+                        colmIndex=0
+                        print self.repolistBox.currentItem().text(colmIndex)
+    def organizationItem_chosen(self):
+	colmIndex = 0
+	text = self.organizationlistBox.currentItem().text(colmIndex)
+
         icon1 = QtGui.QIcon()
-        icon1.addPixmap(QtGui.QPixmap(_fromUtf8("/home/mehtap/BASLA/history.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon1.addPixmap(QtGui.QPixmap(_fromUtf8("history.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         icon2 = QtGui.QIcon()
-	icon2.addPixmap(QtGui.QPixmap(_fromUtf8("/home/mehtap/BASLA/changes.jpg")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+	icon2.addPixmap(QtGui.QPixmap(_fromUtf8("changes.jpg")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         icon3 = QtGui.QIcon()
-	icon3.addPixmap(QtGui.QPixmap(_fromUtf8("/home/mehtap/BASLA/branch.jpeg")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+	icon3.addPixmap(QtGui.QPixmap(_fromUtf8("branch.jpeg")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
 
         self.tabWidget.clear()
         self.tab = QtGui.QWidget()
@@ -140,11 +147,75 @@ class Ui_MainWindow(QtGui.QMainWindow):
         self.tabWidget.addTab(self.tab,icon1, _fromUtf8("HıSTORY"))
         self.tabWidget.addTab(self.tab2,icon2,_fromUtf8("CHANGES"))
         self.tabWidget.addTab(self.tab3,icon3,_fromUtf8("BRANCHES"))
-        
-        
-        	
+        x = 361
+	x1 = 370
+        y1 = 20
+	y2 = 60	
+	a = 30
+        self.github = github(self)
+        user = self.github.user()
+        print type(user.login)
+        event_url = "https://api.github.com/orgs/"+str(text)+"/events" 
 	
-	x = 361
+	#event_url ="https://api.github.com/repos/nyucel/learnyouahaskell/events"   
+        #print event_url
+	event_icerik = urllib.urlopen(event_url)
+	#print event_icerik
+	event_icerik = event_icerik.read()
+	event_icerik = json.loads(event_icerik)
+	
+        
+	#self.label.setText(text)
+	for event in event_icerik:
+          
+	   
+	  for k in event:
+	       
+	    if k=='payload':
+		  
+               if 'commits' in event[k].keys():
+                            			
+		#if 'message' in event[k]['commits']:
+	            for c in event[k]['commits']:
+				text2 = c['message']
+				
+				url = c['url']	
+				url_icerik = urllib.urlopen(url)
+				url_icerik = url_icerik.read()
+			        url_icerik = json.loads(url_icerik)
+			        picture = url_icerik['author']['avatar_url']
+				self.addlabel(y1,y2,text2,x,a,x1,picture)
+			 	                    
+           			y1 = y1 +1
+				y2 = y2 +1
+          		  	a = a+30
+                                          			
+       
+
+              				                    
+    def repoItem_chosen(self):
+	colmIndex = 0
+	text = self.repolistBox.currentItem().text(colmIndex)
+
+        icon1 = QtGui.QIcon()
+        icon1.addPixmap(QtGui.QPixmap(_fromUtf8("history.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon2 = QtGui.QIcon()
+	icon2.addPixmap(QtGui.QPixmap(_fromUtf8("changes.jpg")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon3 = QtGui.QIcon()
+	icon3.addPixmap(QtGui.QPixmap(_fromUtf8("branch.jpeg")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+
+        self.tabWidget.clear()
+        self.tab = QtGui.QWidget()
+        self.tab.setObjectName(_fromUtf8("tab"))
+
+        self.tab2 = QtGui.QWidget()
+        self.tab2.setObjectName(_fromUtf8("tab2"))
+        self.tab3 = QtGui.QWidget()
+        self.tab3.setObjectName(_fromUtf8("tab3"))
+        self.tabWidget.addTab(self.tab,icon1, _fromUtf8("HıSTORY"))
+        self.tabWidget.addTab(self.tab2,icon2,_fromUtf8("CHANGES"))
+        self.tabWidget.addTab(self.tab3,icon3,_fromUtf8("BRANCHES"))
+        x = 361
 	x1 = 370
         y1 = 20
 	y2 = 60	
@@ -166,14 +237,14 @@ class Ui_MainWindow(QtGui.QMainWindow):
 	for event in event_icerik:
           
 	   
-	   for k in event:
+	  for k in event:
 	       
-	       if k=='payload':
+	    if k=='payload':
 		  
-		  if 'commits' in event[k].keys():
+               if 'commits' in event[k].keys():
                             			
-			#if 'message' in event[k]['commits']:
-			    for c in event[k]['commits']:
+		#if 'message' in event[k]['commits']:
+	            for c in event[k]['commits']:
 				text2 = c['message']
 				
 				url = c['url']	

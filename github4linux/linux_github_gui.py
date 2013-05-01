@@ -22,6 +22,7 @@ try:
 except AttributeError:
     _fromUtf8 = lambda s: s
 
+localRepoList = []
 class FindLocalRepoWindow(QtGui.QMainWindow):
     def __init__(self):
 	QtGui.QMainWindow.__init__(self)
@@ -86,9 +87,19 @@ class FindLocalRepoWindow(QtGui.QMainWindow):
 
 
         self.retranslateUi(self)
+	
+	#self.listWidget.itemActivated.connect(self.listWidget.currentItem())
+	self.connect(self.listWidget, QtCore.SIGNAL("itemSelectionChanged()"), self.printItemText)
+ 		
 	QtCore.QObject.connect(self.pushButton, QtCore.SIGNAL(_fromUtf8("clicked()")), self.OpenUserPageWindow)
         QtCore.QObject.connect(self.pushButton_2, QtCore.SIGNAL(_fromUtf8("clicked()")), self.close)
         QtCore.QMetaObject.connectSlotsByName(self)
+    def printItemText(self):
+	items = self.listWidget.selectedItems()
+	
+	for i in range(len(items)):
+		localRepoList.append(str(self.listWidget.selectedItems()[i].text()))
+	print localRepoList		 		 
     def OpenUserPageWindow(self):
 	
 
@@ -108,7 +119,7 @@ class github:
                 self.ui = ui
         def user(self):
                 gh = GitHub()
-                edit_name = 'nyucel'
+                edit_name = 'mgundogan'
                 user = gh.users(edit_name).get()
                 return user
 
@@ -140,6 +151,10 @@ class UserPageWindow(QtGui.QMainWindow):
         root = QtGui.QTreeWidgetItem(self.organizationlistBox, ["Organizations"])
         for organization_text in context2:
              organization = QtGui.QTreeWidgetItem(root, [organization_text['login']])
+	root2 = QtGui.QTreeWidgetItem(self.organizationlistBox, ["Repositories"])
+	for repo_text in context2:
+             repo = QtGui.QTreeWidgetItem(root2, [repo_text['name']])
+
         self.organizationlistBox.show()
 
 	
@@ -147,8 +162,8 @@ class UserPageWindow(QtGui.QMainWindow):
 	self.repolistBox.setGeometry(QtCore.QRect(10,30,150,200))
 	self.repolistBox.setHeaderLabels(["Repositorylist"])
         root = QtGui.QTreeWidgetItem(self.repolistBox, ["Repositories"])
-        for repo_text in context:
-	     repo = QtGui.QTreeWidgetItem(root, [repo_text['name']])
+        for i in localRepoList:
+	    repo = QtGui.QTreeWidgetItem(root,[i])	     
 	self.repolistBox.show()
 	
         self.tabWidget = QtGui.QTabWidget(self.centralwidget)
@@ -210,22 +225,11 @@ class UserPageWindow(QtGui.QMainWindow):
 
         icon1 = QtGui.QIcon()
         icon1.addPixmap(QtGui.QPixmap(_fromUtf8("history.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        icon2 = QtGui.QIcon()
-	icon2.addPixmap(QtGui.QPixmap(_fromUtf8("changes.jpg")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        icon3 = QtGui.QIcon()
-	icon3.addPixmap(QtGui.QPixmap(_fromUtf8("branch.jpeg")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-
         self.tabWidget.clear()
         self.tab = QtGui.QWidget()
         self.tab.setObjectName(_fromUtf8("tab"))
-
-        self.tab2 = QtGui.QWidget()
-        self.tab2.setObjectName(_fromUtf8("tab2"))
-        self.tab3 = QtGui.QWidget()
-        self.tab3.setObjectName(_fromUtf8("tab3"))
-        self.tabWidget.addTab(self.tab,icon1, _fromUtf8("HıSTORY"))
-        self.tabWidget.addTab(self.tab2,icon2,_fromUtf8("CHANGES"))
-        self.tabWidget.addTab(self.tab3,icon3,_fromUtf8("BRANCHES"))
+        self.tabWidget.addTab(self.tab,icon1, _fromUtf8("REPO"))
+        
         x = 361
 	x1 = 370
         y1 = 20

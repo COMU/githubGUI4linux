@@ -15,14 +15,19 @@ from urllib import *
 import json
 import requests
 from github import *
-
-
+import git
+from configobj import ConfigObj
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
 except AttributeError:
     _fromUtf8 = lambda s: s
 
 localRepoList = []
+file_list = []
+value_list = []
+array_list = []
+local_repo_user = []
+value_local = []
 class FindLocalRepoWindow(QtGui.QMainWindow):
     def __init__(self):
 	QtGui.QMainWindow.__init__(self)
@@ -75,16 +80,22 @@ class FindLocalRepoWindow(QtGui.QMainWindow):
 
 	repos_name_array = []
 	array = []
-
+	#value = []
 	for files in glob.iglob(home+"*/.git"):
+		
+		filename = files+"/config"
+	#	config = ConfigObj(filename)
+	#	local_url_value = config['remote "origin"']['url']
+		file_list.append(filename)
         	repos_name = files.split('/')
         	repos_name_array.append(repos_name)
-
+                
+	#	value.append(local_url_value)	
 	array_size = len(repos_name_array)
 	for i in range (0,array_size):
         	array = repos_name_array[i]
 		self.listWidget.addItem(array[3])
-
+	        
 
         self.retranslateUi(self)
 	
@@ -99,6 +110,21 @@ class FindLocalRepoWindow(QtGui.QMainWindow):
 	
 	for i in range(len(items)):
 		localRepoList.append(str(self.listWidget.selectedItems()[i].text()))
+                print localRepoList[0]	
+                for i in range(0,len(file_list)):     
+         	      value = file_list[i].split('/')
+		      print value[3]	
+		      if value[3] == localRepoList[0]:
+						
+		     	
+                          config = ConfigObj(file_list[i])
+        	          local_url_value = config['remote "origin"']['url']
+	                  value_list.append(local_url_value)
+        local = value_list[0].split('/')
+	print "user="
+        value_local.append(local[3])
+	print value_local
+
 	print localRepoList		 		 
     def OpenUserPageWindow(self):
 	
@@ -119,7 +145,7 @@ class github:
                 self.ui = ui
         def user(self):
                 gh = GitHub()
-                edit_name = 'mgundogan'
+                edit_name = 'nyucel'
                 user = gh.users(edit_name).get()
                 return user
 
@@ -146,18 +172,25 @@ class UserPageWindow(QtGui.QMainWindow):
         context2 = json.loads(context2)
  
 	self.organizationlistBox = QtGui.QTreeWidget(self.centralwidget)
-	self.organizationlistBox.setGeometry(QtCore.QRect(10,250,150,200))
+	self.organizationlistBox.setGeometry(QtCore.QRect(10,250,150,240))
         self.organizationlistBox.setHeaderLabels(["Organizationlist"])
         root = QtGui.QTreeWidgetItem(self.organizationlistBox, ["Organizations"])
+	#print type(root)
+
         for organization_text in context2:
              organization = QtGui.QTreeWidgetItem(root, [organization_text['login']])
 	root2 = QtGui.QTreeWidgetItem(self.organizationlistBox, ["Repositories"])
-	for repo_text in context2:
+	#print type(root2)
+	repo_url = user.repos_url
+        context = urllib.urlopen(repo_url)
+        context = context.read()
+        context = json.loads(context)
+	for repo_text in context:
              repo = QtGui.QTreeWidgetItem(root2, [repo_text['name']])
 
         self.organizationlistBox.show()
 
-	
+      	
         self.repolistBox = QtGui.QTreeWidget(self.centralwidget)
 	self.repolistBox.setGeometry(QtCore.QRect(10,30,150,200))
 	self.repolistBox.setHeaderLabels(["Repositorylist"])
@@ -165,6 +198,11 @@ class UserPageWindow(QtGui.QMainWindow):
         for i in localRepoList:
 	    repo = QtGui.QTreeWidgetItem(root,[i])	     
 	self.repolistBox.show()
+        
+	self.pushButton = QtGui.QPushButton(self.centralwidget)
+        self.pushButton.setGeometry(QtCore.QRect(40, 30,30, 20))
+        self.pushButton.setObjectName(_fromUtf8("clone"))
+        self.pushButton.hide()
 	
         self.tabWidget = QtGui.QTabWidget(self.centralwidget)
         self.tabWidget.setGeometry(QtCore.QRect(160, 30, 441, 451))
@@ -222,6 +260,7 @@ class UserPageWindow(QtGui.QMainWindow):
     def organizationItem_chosen(self):
 	colmIndex = 0
 	text = self.organizationlistBox.currentItem().text(colmIndex)
+	
 
         icon1 = QtGui.QIcon()
         icon1.addPixmap(QtGui.QPixmap(_fromUtf8("history.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
@@ -235,47 +274,59 @@ class UserPageWindow(QtGui.QMainWindow):
         y1 = 20
 	y2 = 60	
 	a = 30
+	px = 30
+        py = 30
+        pz = 20
+
         self.github = github(self)
         user = self.github.user()
         print type(user.login)
-        event_url = "https://api.github.com/orgs/"+str(text)+"/events" 
 	
-	#event_url ="https://api.github.com/repos/nyucel/learnyouahaskell/events"   
-        #print event_url
-	event_icerik = urllib.urlopen(event_url)
-	#print event_icerik
-	event_icerik = event_icerik.read()
-	event_icerik = json.loads(event_icerik)
-	
-        
-	#self.label.setText(text)
-	for event in event_icerik:
-          
-	   
-	  for k in event:
-	       
-	    if k=='payload':
-		  
-               if 'commits' in event[k].keys():
-                            			
-		#if 'message' in event[k]['commits']:
-	            for c in event[k]['commits']:
-				text2 = c['message']
-				
-				url = c['url']	
-				url_icerik = urllib.urlopen(url)
-				url_icerik = url_icerik.read()
-			        url_icerik = json.loads(url_icerik)
-			        picture = url_icerik['author']['avatar_url']
-				self.addlabel(y1,y2,text2,x,a,x1,picture)
-			 	                    
-           			y1 = y1 +1
-				y2 = y2 +1
-          		  	a = a+30
-                                          			
-       
+        if self.organizationlistBox.topLevelItem(1).text(colmIndex) :
+	     self.github = github(self)
+             user = self.github.user()
+             print type(user.login)
+	     repo_url = user.repos_url
+             context = urllib.urlopen(repo_url)
+             context = context.read()
+             context = json.loads(context)
+             for repo_text in context:
+            # event_url = "https://api.github.com/repos/"+str(user.login)+"/"+str(text)
+                  text2 = repo_text['name']	
+	          
+                  self.addlabel2(x,x1,y1,y2,a,text2,px,py,pz)
+	          y1 = y1+1
+		  y2 = y2+1
+		  a = a+30	               
+                  px = px +1
+		  py = py+1
+		  pz = pz +40		
+    def addlabel2(self,x,x1,y1,y2,a,text2,px,py,pz):
 
-              				                    
+        self.frame_2 = QtGui.QFrame(self.tab)
+        self.frame_2.setGeometry(QtCore.QRect(10,a,x,y1))
+        self.frame_2.setFrameShape(QtGui.QFrame.StyledPanel)
+        self.frame_2.setFrameShadow(QtGui.QFrame.Raised)
+        self.frame_2.setObjectName(_fromUtf8("frame_2"))
+        self.pushButton= QtGui.QPushButton(self.frame_2)
+
+        #self.pushButton.setGeometry(QtCore.QRect(40,px,py,pz))
+        self.pushButton.move(300,0)
+        self.pushButton.setText("clone")
+
+        self.label2 = QtGui.QLabel(self.frame_2)
+        #self.label2.setGeometry(QtCore.QRect(20,80,370,y2 )) 
+        self.label2.setText(text2)
+        self.label2.move(50,0)
+        self.frame_2.show()
+        self.label2.show()
+        self.pushButton.show()
+
+       #clone_url = "https://github.com/"+user.login+"/"+str(text)+".git" 
+	
+	
+       #git.Git().clone(clone_url)
+       #print "clonelandi"          
     def repoItem_chosen(self):
 	colmIndex = 0
 	text = self.repolistBox.currentItem().text(colmIndex)
@@ -304,10 +355,12 @@ class UserPageWindow(QtGui.QMainWindow):
 	y2 = 60	
 	a = 30
         self.github = github(self)
-        user = self.github.user()
-        print type(user.login)
-        event_url = "https://api.github.com/repos/"+str(user.login)+"/"+str(text)+"/events" 
-	
+        print self.github.user()
+	user = value_local[0]
+	print "hey"
+        print user
+        event_url = "https://api.github.com/repos/"+user+"/"+str(text)+"/events" 
+	print event_url
 	#event_url ="https://api.github.com/repos/nyucel/learnyouahaskell/events"   
         #print event_url
 	event_icerik = urllib.urlopen(event_url)
@@ -345,9 +398,7 @@ class UserPageWindow(QtGui.QMainWindow):
 
               				
        
-    	self.addlabel2(text)
-    def addlabel2(self,text):
-        print text	
+    		
     def addlabel(self,y1,y2,text2,x,a,x1,picture):   
         	
         self.frame_2 = QtGui.QFrame(self.tab)
@@ -402,6 +453,7 @@ class UserPageWindow(QtGui.QMainWindow):
     def retranslateUi(self, MainWindow):
         MainWindow.setWindowTitle(QtGui.QApplication.translate("MainWindow", "MainWindow", None, QtGui.QApplication.UnicodeUTF8))
         #self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), QtGui.QApplication.translate("MainWindow", "Tab 1", None, QtGui.QApplication.UnicodeUTF8))
+	self.pushButton.setText(QtGui.QApplication.translate("MainWindow", "clone", None, QtGui.QApplication.UnicodeUTF8))
 
 app = QtGui.QApplication(sys.argv)
 window = FindLocalRepoWindow()

@@ -251,6 +251,7 @@ class UserPageWindow(QtGui.QMainWindow):
 	self.repolistBox.itemSelectionChanged.connect(self.displayItem)
         self.repolistBox.itemSelectionChanged.connect(self.repoItem_chosen)
 	self.organizationlistBox.itemSelectionChanged.connect(self.organizationItem_chosen)
+	#QtCore.QObject.connect(self.pushButton, QtCore.SIGNAL(_fromUtf8("clicked()")), self.clone(clone_url))
 
 
 	
@@ -293,15 +294,16 @@ class UserPageWindow(QtGui.QMainWindow):
              for repo_text in context:
             # event_url = "https://api.github.com/repos/"+str(user.login)+"/"+str(text)
                   text2 = repo_text['name']	
-	          
-                  self.addlabel2(x,x1,y1,y2,a,text2,px,py,pz)
+	          clone_url = "https://github.com/"+user.login+"/"+str(text)+".git"
+
+                  self.addlabel2(x,x1,y1,y2,a,text2,px,py,pz,clone_url)
 	          y1 = y1+1
 		  y2 = y2+1
 		  a = a+30	               
                   px = px +1
 		  py = py+1
 		  pz = pz +40		
-    def addlabel2(self,x,x1,y1,y2,a,text2,px,py,pz):
+    def addlabel2(self,x,x1,y1,y2,a,text2,px,py,pz,clone_url):
 
         self.frame_2 = QtGui.QFrame(self.tab)
         self.frame_2.setGeometry(QtCore.QRect(10,a,x,y1))
@@ -321,12 +323,17 @@ class UserPageWindow(QtGui.QMainWindow):
         self.frame_2.show()
         self.label2.show()
         self.pushButton.show()
+	
+    
 
+        QtCore.QObject.connect(self.pushButton, QtCore.SIGNAL(_fromUtf8("clicked()")), self.clone(clone_url))
+
+    def clone(self,clone_url):    
        #clone_url = "https://github.com/"+user.login+"/"+str(text)+".git" 
 	
 	
-       #git.Git().clone(clone_url)
-       #print "clonelandi"          
+       git.Git().clone(clone_url)
+       print "clonelandi"          
     def repoItem_chosen(self):
 	colmIndex = 0
 	text = self.repolistBox.currentItem().text(colmIndex)

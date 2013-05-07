@@ -8,6 +8,7 @@ import requests
 import getpass
 import json
 import time
+from common import consumer_key, consumer_secret, host
 
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
@@ -25,7 +26,7 @@ class Ui_MainWindow(object):
         	self.label = QtGui.QLabel(self.centralwidget)
         	self.label.setGeometry(QtCore.QRect(540, 20, 251, 211))
         	self.label.setText(_fromUtf8(""))
-        	self.label.setPixmap(QtGui.QPixmap(_fromUtf8("github-logo.png")))
+        	self.label.setPixmap(QtGui.QPixmap(_fromUtf8("pictures/github-logo.png")))
         	self.label.setObjectName(_fromUtf8("label"))
         	self.lineEdit = QtGui.QLineEdit(self.centralwidget)
         	self.lineEdit.setGeometry(QtCore.QRect(250, 220, 281, 27))
@@ -47,10 +48,16 @@ class Ui_MainWindow(object):
         	self.lineEdit_2.setObjectName(_fromUtf8("lineEdit_2"))
         	self.pushButton = QtGui.QPushButton(self.centralwidget)
         	self.pushButton.setGeometry(QtCore.QRect(250, 350, 98, 27))
+		icon = QtGui.QIcon()
+        	icon.addPixmap(QtGui.QPixmap(_fromUtf8("pictures/login.gif")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        	self.pushButton.setIcon(icon)
         	self.pushButton.setObjectName(_fromUtf8("pushButton"))
         	self.pushButton_2 = QtGui.QPushButton(self.centralwidget)
         	self.pushButton_2.setGeometry(QtCore.QRect(380, 350, 98, 27))
         	self.pushButton_2.setObjectName(_fromUtf8("pushButton_2"))
+		icon1 = QtGui.QIcon()
+        	icon1.addPixmap(QtGui.QPixmap(_fromUtf8("pictures/skip.gif")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        	self.pushButton_2.setIcon(icon1)
         	self.uyariLabel = QtGui.QLabel(self.centralwidget)
         	self.uyariLabel.setGeometry(QtCore.QRect(40, 320, 701, 17))
         	self.uyariLabel.setObjectName(_fromUtf8("uyariLabel"))
@@ -79,7 +86,7 @@ class Ui_MainWindow(object):
 	def getUserData(self):
 	        uName = str(ui.lineEdit.text())
 	        pWord = str(ui.lineEdit_2.text())
-	
+		flag = 1	
 	        # kullanici adi ve parolasi alinarak token degeri elde ediliyor.
 	        github_api = "https://api.github.com"
 	        uName = str(ui.lineEdit.text())
@@ -102,40 +109,47 @@ class Ui_MainWindow(object):
 	                ui.uyariLabel.setText(u"internet baglantinizda ya da girdiginiz kullanici adi ve parolasinda hata bulunmaktadir. Kontrol ediniz!")
 	                ui.lineEdit.clear()
 	                ui.lineEdit_2.clear()
-	
-# github da her kullanici icin kendi hesaplarindaki applications kisminda github tarafindan uygulamaya izin verilir 
-	        note = "github4linux"
-	        url = urljoin(github_api, 'authorizations')
-	        payload = {}
-	        if note:
-	                payload['note'] = note
-	        res = requests.post(
-	                url,
-	                auth = (uName, pWord),
-	                data = json.dumps(payload),
-	                )
-	        j = json.loads(res.text)
-	        oauth_token = j['token']
-	        
-# OAuth ile ilgili islemler
-		url = "https://github4linux.com"
-		params = {
- 	 	 'oauth_version': "1.0",
-   		 'oauth_nonce': oauth.generate_nonce(),
-   		 'oauth_timestamp': int(time.time()),
-   		 'user': 'kancer',
-   		 'photoid': 555555555555
-			}
-		token = oauth.Token(key= oauth_token, secret="tok-test-secret")
-		consumer = oauth.Consumer(key="0fa36f5e0e4a9e8bc5d6", secret="1362038cf19b885487539929003d9ed062550376")
+			flag = 0
+
+# github da her kullanici icin kendi hesaplarindaki applications kisminda github tarafindan uygulamaya izin verilir
+		if flag == 1: 
+		        note = "github4linux"
+		        url = urljoin(github_api, 'authorizations')
+		        payload = {}
+		        if note:
+		                payload['note'] = note
+		        res = requests.post(
+		                url,
+		                auth = (uName, pWord),
+		                data = json.dumps(payload),
+		                )
+		        j = json.loads(res.text)
+		        oauth_token = j['token']
+		        
+	# OAuth ile ilgili islemler
+			url = "http://github4linux.com"
+			params = {
+	 	 	 'oauth_version': "1.0",
+	   		 'oauth_nonce': oauth.generate_nonce(),
+	   		 'oauth_timestamp': int(time.time()),
+	   		 'user': 'kancer',
+	   		 'photoid': 555555555555
+				}
+			token = oauth.Token(key= oauth_token, secret="tok-test-secret")
+			consumer = oauth.Consumer(key= consumer_key, secret= consumer_secret)
+			
+			# Set our token/key parameters
+			params['oauth_token'] = token.key
+			params['oauth_consumer_key'] = consumer.key
+			
+			# Create our request. Change method, etc. accordingly.
+			req = oauth.Request(method="GET", url=url, parameters=params)
+			
+			# Sign the request.
+			signature_method = oauth.SignatureMethod_HMAC_SHA1()
+			req.sign_request(signature_method, consumer, token)	
 		
-		# Set our token/key parameters
-		params['oauth_token'] = token.key
-		params['oauth_consumer_key'] = consumer.key
-		
-		# Create our request. Change method, etc. accordingly.
-		req = oauth.Request(method="GET", url=url, parameters=params)
-		
+<<<<<<< HEAD
 		# Sign the request.
 		signature_method = oauth.SignatureMethod_HMAC_SHA1()
 		req.sign_request(signature_method, consumer, token)	
@@ -161,6 +175,28 @@ class Ui_MainWindow(object):
         	self.oauth_secret = data['oauth_token_secret']
 
         	return 'http://%s/OAuth.action?oauth_token=' % HOST + urllib.quote(data['oauth_token'])
+=======
+			request_token_url = "https://api.github.com"
+			authorize_url = "https://github.com/login/oauth/authorize"
+			redirect_uri = "http://github4linux.com"
+			access_token_url = "https://github.com/login/oauth/access_token"
+
+			client = oauth.Client(consumer)
+			resp, content = client.request(request_token_url, "GET")
+			print resp
+			print content
+			
+			if resp['status'] != '200':
+    				raise Exception("Invalid response %s." % resp['status'])
+
+			request_token = dict(urlparse.parse_qsl(content))
+			
+			print "Go to the following link in your browser:"
+			print "%s?client_id=%s&scope=repo&redirect_uri=%s" % (authorize_url,consumer_key, redirect_uri)
+
+			
+			
+>>>>>>> 9897a30c5239a891e3fd5084a38f6aa36db386a8
 
 	def retranslateUi(self, MainWindow):
        		 MainWindow.setWindowTitle(QtGui.QApplication.translate("MainWindow", "MainWindow", None, QtGui.QApplication.UnicodeUTF8))

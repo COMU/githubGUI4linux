@@ -10,19 +10,21 @@ from PyQt4 import QtCore, QtGui
 import commands
 import sys
 import glob
+from gui import *
 
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
 except AttributeError:
     _fromUtf8 = lambda s: s
 
-class Ui_MainWindow(object):
-    def setupUi(self, MainWindow):
-        MainWindow.setObjectName(_fromUtf8("MainWindow"))
-        MainWindow.resize(800, 600)
-        self.centralwidget = QtGui.QWidget(MainWindow)
+class FindLocalRepoWindow(QtGui.QMainWindow):
+    def __init__(self):
+	QtGui.QMainWindow.__init__(self)
+	self.setObjectName(_fromUtf8("Adding Local Repos"))
+        self.resize(800,600)
+        self.centralwidget = QtGui.QWidget(self)
         self.centralwidget.setObjectName(_fromUtf8("centralwidget"))
-        self.label = QtGui.QLabel(self.centralwidget)
+	self.label = QtGui.QLabel(self.centralwidget)
         self.label.setGeometry(QtCore.QRect(50, 70, 251, 31))
         self.label.setObjectName(_fromUtf8("label"))
         self.label_2 = QtGui.QLabel(self.centralwidget)
@@ -39,14 +41,14 @@ class Ui_MainWindow(object):
         self.listWidget = QtGui.QListWidget(self.centralwidget)
         self.listWidget.setGeometry(QtCore.QRect(50, 150, 401, 151))
         self.listWidget.setObjectName(_fromUtf8("listWidget"))
-        MainWindow.setCentralWidget(self.centralwidget)
-        self.menubar = QtGui.QMenuBar(MainWindow)
+        self.setCentralWidget(self.centralwidget)
+        self.menubar = QtGui.QMenuBar(self)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 800, 25))
         self.menubar.setObjectName(_fromUtf8("menubar"))
-        MainWindow.setMenuBar(self.menubar)
-        self.statusbar = QtGui.QStatusBar(MainWindow)
+        self.setMenuBar(self.menubar)
+        self.statusbar = QtGui.QStatusBar(self)
         self.statusbar.setObjectName(_fromUtf8("statusbar"))
-        MainWindow.setStatusBar(self.statusbar)
+        self.setStatusBar(self.statusbar)
 	
 
 	# program kuruldugunda, kullanicinin yerelinde otomatik olarak bir dizin olusturuluyor
@@ -79,8 +81,14 @@ class Ui_MainWindow(object):
 
 
         self.retranslateUi(MainWindow)
+	QtCore.QObject.connect(self.pushButton, QtCore.SIGNAL(_fromUtf8("clicked()")), MainWindow.OpenUserPageWindow)
         QtCore.QObject.connect(self.pushButton_2, QtCore.SIGNAL(_fromUtf8("clicked()")), MainWindow.close)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
+    def OpenUserPageWindow(self):
+	self.new = UserPageWindow()
+
+        self.new.show()
+     
 
     def retranslateUi(self, MainWindow):
         MainWindow.setWindowTitle(QtGui.QApplication.translate("MainWindow", "MainWindow", None, QtGui.QApplication.UnicodeUTF8))
@@ -90,9 +98,6 @@ class Ui_MainWindow(object):
         self.pushButton_2.setText(QtGui.QApplication.translate("MainWindow", "SKIP", None, QtGui.QApplication.UnicodeUTF8))
 
 app = QtGui.QApplication(sys.argv)
-window = QtGui.QMainWindow()
-ui = Ui_MainWindow()
-ui.setupUi(window)
-
+window = FindLocalRepoWindow()
 window.show()
 sys.exit(app.exec_())

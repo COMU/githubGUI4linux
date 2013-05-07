@@ -155,12 +155,12 @@ class Ui_MainWindow(object):
 
 		resp, content = client.request('https://%s/oauth?oauth_callback=' % HOST + urllib2.quote('http://github4linux/'), 'GET')
 
-       		 data = dict(urlparse.parse_qsl(content))
+       		data = dict(urlparse.parse_qsl(content))
 
-      		 self.oauth_token = data['oauth_token']
-        	 self.oauth_secret = data['oauth_token_secret']
+      		self.oauth_token = data['oauth_token']
+        	self.oauth_secret = data['oauth_token_secret']
 
-        	 return 'http://%s/OAuth.action?oauth_token=' % HOST + urllib.quote(data['oauth_token'])
+        	return 'http://%s/OAuth.action?oauth_token=' % HOST + urllib.quote(data['oauth_token'])
 
 	def retranslateUi(self, MainWindow):
        		 MainWindow.setWindowTitle(QtGui.QApplication.translate("MainWindow", "MainWindow", None, QtGui.QApplication.UnicodeUTF8))

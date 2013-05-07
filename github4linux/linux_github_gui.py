@@ -119,7 +119,7 @@ class github:
                 self.ui = ui
         def user(self):
                 gh = GitHub()
-                edit_name = 'mgundogan'
+                edit_name = 'nyucel'
                 user = gh.users(edit_name).get()
                 return user
 
@@ -172,16 +172,16 @@ class UserPageWindow(QtGui.QMainWindow):
         
         icon1 = QtGui.QIcon()
         
-
- 	icon1.addPixmap(QtGui.QPixmap(_fromUtf8("history.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+	
+ 	icon1.addPixmap(QtGui.QPixmap(_fromUtf8("history.gif")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         icon2 = QtGui.QIcon()
         
 
-        icon2.addPixmap(QtGui.QPixmap(_fromUtf8("changes.jpg")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon2.addPixmap(QtGui.QPixmap(_fromUtf8("changes.gif")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         icon3 = QtGui.QIcon()
         
 
-        icon3.addPixmap(QtGui.QPixmap(_fromUtf8("branch.jpeg")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon3.addPixmap(QtGui.QPixmap(_fromUtf8("branches.gif")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
 
         self.tab = QtGui.QWidget()
         self.tab.setObjectName(_fromUtf8("tab"))
@@ -192,7 +192,7 @@ class UserPageWindow(QtGui.QMainWindow):
         self.tab3.setObjectName(_fromUtf8("tab3"))
 
         
-        self.tabWidget.addTab(self.tab,icon1, _fromUtf8("HıSTORY"))
+        self.tabWidget.addTab(self.tab,icon1, _fromUtf8("HISTORY"))
         self.tabWidget.addTab(self.tab2,icon2,_fromUtf8("CHANGES"))
 	self.tabWidget.addTab(self.tab3,icon3, _fromUtf8("BRANCHES"))
         
@@ -206,6 +206,13 @@ class UserPageWindow(QtGui.QMainWindow):
         self.statusbar = QtGui.QStatusBar(self)
         self.statusbar.setObjectName(_fromUtf8("statusbar"))
         self.setStatusBar(self.statusbar)
+	
+#	self.label_2 = QtGui.QLabel(self.centralwidget)
+#        self.label_2.setGeometry(QtCore.QRect(510, 40, 241, 211))
+#        self.label_2.setText(_fromUtf8(""))
+#        self.label_2.setPixmap(QtGui.QPixmap(_fromUtf8("github-logo.png")))
+#        self.label_2.setObjectName(_fromUtf8("label_2"))
+#
 
         self.retranslateUi(self)
         QtCore.QMetaObject.connectSlotsByName(self)
@@ -224,7 +231,7 @@ class UserPageWindow(QtGui.QMainWindow):
 	text = self.organizationlistBox.currentItem().text(colmIndex)
 
         icon1 = QtGui.QIcon()
-        icon1.addPixmap(QtGui.QPixmap(_fromUtf8("history.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon1.addPixmap(QtGui.QPixmap(_fromUtf8("repo.gif")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.tabWidget.clear()
         self.tab = QtGui.QWidget()
         self.tab.setObjectName(_fromUtf8("tab"))
@@ -281,11 +288,11 @@ class UserPageWindow(QtGui.QMainWindow):
 	text = self.repolistBox.currentItem().text(colmIndex)
 
         icon1 = QtGui.QIcon()
-        icon1.addPixmap(QtGui.QPixmap(_fromUtf8("history.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon1.addPixmap(QtGui.QPixmap(_fromUtf8("history.gif")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         icon2 = QtGui.QIcon()
-	icon2.addPixmap(QtGui.QPixmap(_fromUtf8("changes.jpg")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+	icon2.addPixmap(QtGui.QPixmap(_fromUtf8("changes.gif")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         icon3 = QtGui.QIcon()
-	icon3.addPixmap(QtGui.QPixmap(_fromUtf8("branch.jpeg")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+	icon3.addPixmap(QtGui.QPixmap(_fromUtf8("branches.gif")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
 
         self.tabWidget.clear()
         self.tab = QtGui.QWidget()

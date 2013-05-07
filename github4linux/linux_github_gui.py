@@ -203,6 +203,11 @@ class UserPageWindow(QtGui.QMainWindow):
         self.pushButton.setGeometry(QtCore.QRect(40, 30,30, 20))
         self.pushButton.setObjectName(_fromUtf8("clone"))
         self.pushButton.hide()
+        self.label_2 = QtGui.QLabel(self.centralwidget)
+        self.label_2.setGeometry(QtCore.QRect(510, 40, 241, 211))
+        self.label_2.setText(_fromUtf8(""))
+        self.label_2.setPixmap(QtGui.QPixmap(_fromUtf8("github-logo.png")))
+        self.label_2.setObjectName(_fromUtf8("label_2"))
 	
         self.tabWidget = QtGui.QTabWidget(self.centralwidget)
         self.tabWidget.setGeometry(QtCore.QRect(160, 30, 441, 451))
@@ -413,10 +418,10 @@ class UserPageWindow(QtGui.QMainWindow):
         self.frame_2.setFrameShape(QtGui.QFrame.StyledPanel)
         self.frame_2.setFrameShadow(QtGui.QFrame.Raised)
         self.frame_2.setObjectName(_fromUtf8("frame_2"))
-        self.pushButton= QtGui.QPushButton(self.tab)
+        #self.pushButton= QtGui.QPushButton(self.tab)
 
-	self.pushButton.setGeometry(QtCore.QRect(370,30,30,20))
-	self.pushButton.setObjectName(_fromUtf8("pushButton"))
+	#self.pushButton.setGeometry(QtCore.QRect(370,30,30,20))
+	#self.pushButton.setObjectName(_fromUtf8("pushButton"))
 	self.label2 = QtGui.QLabel(self.frame_2)
         #self.label2.setGeometry(QtCore.QRect(20,80,370,y2 )) 
 	self.label2.setText(text2)
@@ -454,11 +459,11 @@ class UserPageWindow(QtGui.QMainWindow):
 	self.label2.move(50,0)
 	self.frame_2.show()
 	self.label2.show()
-        self.pushButton.show()
+        #self.pushButton.show()
 #       self.label4.show()
         
     def retranslateUi(self, MainWindow):
-        MainWindow.setWindowTitle(QtGui.QApplication.translate("MainWindow", "MainWindow", None, QtGui.QApplication.UnicodeUTF8))
+        MainWindow.setWindowTitle(QtGui.QApplication.translate("MainWindow", "GithubGUI4linux", None, QtGui.QApplication.UnicodeUTF8))
         #self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), QtGui.QApplication.translate("MainWindow", "Tab 1", None, QtGui.QApplication.UnicodeUTF8))
 	self.pushButton.setText(QtGui.QApplication.translate("MainWindow", "clone", None, QtGui.QApplication.UnicodeUTF8))
 

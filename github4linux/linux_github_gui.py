@@ -42,7 +42,8 @@ class FindLocalRepoWindow(QtGui.QMainWindow):
         self.label_2.setGeometry(QtCore.QRect(510, 40, 241, 211))
         self.label_2.setText(_fromUtf8(""))
         self.label_2.setPixmap(QtGui.QPixmap(_fromUtf8("pictures/github-logo.png")))
-        self.label_2.setObjectName(_fromUtf8("label_2"))
+        self.label_2.setObjectName(_fromUtf8("label_2"))     
+        self.label_2.show()
         self.pushButton = QtGui.QPushButton(self.centralwidget)
         self.pushButton.setGeometry(QtCore.QRect(300, 470, 111, 27))
         self.pushButton.setObjectName(_fromUtf8("pushButton"))
@@ -135,7 +136,7 @@ class FindLocalRepoWindow(QtGui.QMainWindow):
         
 
     def retranslateUi(self, MainWindow):
-        MainWindow.setWindowTitle(QtGui.QApplication.translate("MainWindow", "MainWindow", None, QtGui.QApplication.UnicodeUTF8))
+        MainWindow.setWindowTitle(QtGui.QApplication.translate("MainWindow", "Add Your Local Repository for githubgui4linux", None, QtGui.QApplication.UnicodeUTF8))
         self.label.setText(QtGui.QApplication.translate("MainWindow", "<html><head/><body><p><span style=\" font-size:16pt; font-weight:600;\">Find Local Repositories</span></p></body></html>", None, QtGui.QApplication.UnicodeUTF8))
                                                            
 	self.pushButton.setText(QtGui.QApplication.translate("MainWindow", "ADD SELECTED", None, QtGui.QApplication.UnicodeUTF8))
@@ -157,7 +158,13 @@ class UserPageWindow(QtGui.QMainWindow):
         self.resize(800,600)
         self.centralwidget = QtGui.QWidget(self)
         self.centralwidget.setObjectName(_fromUtf8("centralwidget"))
-           
+        self.label_2 = QtGui.QLabel(self.centralwidget)
+        self.label_2.setGeometry(QtCore.QRect(610, 40,350, 211))
+        self.label_2.setText(_fromUtf8(""))
+        self.label_2.setPixmap(QtGui.QPixmap(_fromUtf8("picture/github-logo.png")))
+        self.label_2.setObjectName(_fromUtf8("label_2"))
+        self.label_2.show()
+  
 	#githubtan depolar
 	self.github = github(self)
         user = self.github.user()
@@ -203,12 +210,6 @@ class UserPageWindow(QtGui.QMainWindow):
         self.pushButton.setGeometry(QtCore.QRect(40, 30,30, 20))
         self.pushButton.setObjectName(_fromUtf8("clone"))
         self.pushButton.hide()
-        self.label_2 = QtGui.QLabel(self.centralwidget)
-        self.label_2.setGeometry(QtCore.QRect(510, 40, 241, 211))
-        self.label_2.setText(_fromUtf8(""))
-        self.label_2.setPixmap(QtGui.QPixmap(_fromUtf8("github-logo.png")))
-        self.label_2.setObjectName(_fromUtf8("label_2"))
-	
         self.tabWidget = QtGui.QTabWidget(self.centralwidget)
         self.tabWidget.setGeometry(QtCore.QRect(160, 30, 441, 451))
         self.tabWidget.setObjectName(_fromUtf8("tabWidget"))
@@ -250,12 +251,12 @@ class UserPageWindow(QtGui.QMainWindow):
         self.statusbar.setObjectName(_fromUtf8("statusbar"))
         self.setStatusBar(self.statusbar)
 	
-#	self.label_2 = QtGui.QLabel(self.centralwidget)
-#        self.label_2.setGeometry(QtCore.QRect(510, 40, 241, 211))
-#        self.label_2.setText(_fromUtf8(""))
-#        self.label_2.setPixmap(QtGui.QPixmap(_fromUtf8("github-logo.png")))
-#        self.label_2.setObjectName(_fromUtf8("label_2"))
-#
+	self.label_2 = QtGui.QLabel(self.centralwidget)
+        self.label_2.setGeometry(QtCore.QRect(610, 40, 241, 211))
+        self.label_2.setText(_fromUtf8(""))
+        self.label_2.setPixmap(QtGui.QPixmap(_fromUtf8("picture/github-logo.png")))
+        self.label_2.setObjectName(_fromUtf8("label_2"))
+        self.label_2.show() 
 
         self.retranslateUi(self)
         QtCore.QMetaObject.connectSlotsByName(self)
@@ -281,7 +282,12 @@ class UserPageWindow(QtGui.QMainWindow):
         self.tab = QtGui.QWidget()
         self.tab.setObjectName(_fromUtf8("tab"))
         self.tabWidget.addTab(self.tab,icon1, _fromUtf8("REPO"))
-        
+        self.label_2 = QtGui.QLabel(self.centralwidget)
+        self.label_2.setGeometry(QtCore.QRect(610, 40, 350, 211))
+        self.label_2.setText(_fromUtf8(""))
+        self.label_2.setPixmap(QtGui.QPixmap(_fromUtf8("pictures/github-logo.png")))
+        self.label_2.setObjectName(_fromUtf8("label_2"))
+        self.label_2.show() 
         x = 361
 	x1 = 370
         y1 = 20
@@ -306,7 +312,7 @@ class UserPageWindow(QtGui.QMainWindow):
              for repo_text in context:
             # event_url = "https://api.github.com/repos/"+str(user.login)+"/"+str(text)
                   text2 = repo_text['name']	
-	          clone_url = "https://github.com/"+user.login+"/"+str(text)+".git"
+	          clone_url = "https://github.com/"+user.login+"/"+str(text2)+".git"
 
                   self.addlabel2(x,x1,y1,y2,a,text2,px,py,pz,clone_url)
 	          y1 = y1+1
@@ -325,8 +331,9 @@ class UserPageWindow(QtGui.QMainWindow):
         self.pushButton= QtGui.QPushButton(self.frame_2)
 
         #self.pushButton.setGeometry(QtCore.QRect(40,px,py,pz))
-        self.pushButton.move(300,0)
-        self.pushButton.setText("clone")
+        self.pushButton.move(250,0)
+        self.pushButton.setText("Look Content")
+	QtCore.QObject.connect(self.pushButton, QtCore.SIGNAL(_fromUtf8("clicked()")), self.clone(clone_url))
 
         self.label2 = QtGui.QLabel(self.frame_2)
         #self.label2.setGeometry(QtCore.QRect(20,80,370,y2 )) 
@@ -338,8 +345,9 @@ class UserPageWindow(QtGui.QMainWindow):
 	
     
 
-        QtCore.QObject.connect(self.pushButton, QtCore.SIGNAL(_fromUtf8("clicked()")), self.clone(clone_url))
-
+        #QtCore.QObject.connect(self.pushButton, QtCore.SIGNAL(_fromUtf8("clicked()")), self.clone(clone_url))
+    def goster(self):
+	print "merhaba" 	
     def clone(self,clone_url):    
        #clone_url = "https://github.com/"+user.login+"/"+str(text)+".git" 
 	
@@ -368,6 +376,12 @@ class UserPageWindow(QtGui.QMainWindow):
         self.tabWidget.addTab(self.tab,icon1, _fromUtf8("HISTORY"))
         self.tabWidget.addTab(self.tab2,icon2,_fromUtf8("CHANGES"))
         self.tabWidget.addTab(self.tab3,icon3,_fromUtf8("BRANCHES"))
+        self.label_2 = QtGui.QLabel(self.centralwidget)
+        self.label_2.setGeometry(QtCore.QRect(510, 40, 241, 211))
+        self.label_2.setText(_fromUtf8(""))
+        self.label_2.setPixmap(QtGui.QPixmap(_fromUtf8("pictures/github-logo.png")))
+        self.label_2.setObjectName(_fromUtf8("label_2"))
+        self.label_2.show() 
         x = 361
 	x1 = 370
         y1 = 20
@@ -472,7 +486,7 @@ class UserPageWindow(QtGui.QMainWindow):
     def retranslateUi(self, MainWindow):
         MainWindow.setWindowTitle(QtGui.QApplication.translate("MainWindow", "GithubGUI4linux", None, QtGui.QApplication.UnicodeUTF8))
         #self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), QtGui.QApplication.translate("MainWindow", "Tab 1", None, QtGui.QApplication.UnicodeUTF8))
-	self.pushButton.setText(QtGui.QApplication.translate("MainWindow", "clone", None, QtGui.QApplication.UnicodeUTF8))
+	self.pushButton.setText(QtGui.QApplication.translate("MainWindow", "look repo content", None, QtGui.QApplication.UnicodeUTF8))
 
 app = QtGui.QApplication(sys.argv)
 window = FindLocalRepoWindow()

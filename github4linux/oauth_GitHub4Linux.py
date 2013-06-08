@@ -84,8 +84,6 @@ class Ui_MainWindow(object):
 # kullanici tarafindan arayuzden girilen kullanici adi ve parolasinin alinip boyle bir kullanicinin var olup olmadiginin sorusturulmasi
 
 	def getUserData(self):
-	        uName = str(ui.lineEdit.text())
-	        pWord = str(ui.lineEdit_2.text())
 		flag = 1	
 	        # kullanici adi ve parolasi alinarak token degeri elde ediliyor.
 	        github_api = "https://api.github.com"
@@ -124,8 +122,10 @@ class Ui_MainWindow(object):
 		                data = json.dumps(payload),
 		                )
 		        j = json.loads(res.text)
+			print "J: ",j
 		        oauth_token = j['token']
-		        
+		        print "oauth token : ",oauth_token
+
 	# OAuth ile ilgili islemler
 			url = "http://github4linux.com"
 			params = {
@@ -149,33 +149,32 @@ class Ui_MainWindow(object):
 			signature_method = oauth.SignatureMethod_HMAC_SHA1()
 			req.sign_request(signature_method, consumer, token)	
 		
-<<<<<<< HEAD
-		# Sign the request.
-		signature_method = oauth.SignatureMethod_HMAC_SHA1()
-		req.sign_request(signature_method, consumer, token)	
-		
-		oauth_verifier = url.split('oauth_verifier=')[-1]
-		token.set_verifier(oauth_verifier)
-		
-		client = oauth.Client(consumer,token)	
-		resp, content = client.request('https://github4linux/oauth','POST')  # sunucuya erisim hatasi veriyor. Boyle bir adres olmadigi icin
+			# Sign the request.
+			signature_method = oauth.SignatureMethod_HMAC_SHA1()
+			req.sign_request(signature_method, consumer, token)	
+			
+			oauth_verifier = url.split('oauth_verifier=')[-1]
+			token.set_verifier(oauth_verifier)
+			
+			client = oauth.Client(consumer,token)	
+			resp, content = client.request('https://github4linux/oauth','POST')  # sunucuya erisim hatasi veriyor. Boyle bir adres olmadigi icin
+	
+			access_token = dict(urlparse.parse_qsl(content))
+			print access_token['oauth_token']
+			print access_token['oauth_token_secret']
+	
+			ENAPI.set_access_token(access_token['oauth_token'])
+	
+	
+			resp, content = client.request('https://%s/oauth?oauth_callback=' % HOST + urllib2.quote('http://github4linux/'), 'GET')
+	
+	       		data = dict(urlparse.parse_qsl(content))
+	
+	      		self.oauth_token = data['oauth_token']
+	        	self.oauth_secret = data['oauth_token_secret']
+	
+        		return 'http://%s/OAuth.action?oauth_token=' % HOST + urllib.quote(data['oauth_token'])
 
-		access_token = dict(urlparse.parse_qsl(content))
-		print access_token['oauth_token']
-		print access_token['oauth_token_secret']
-
-		ENAPI.set_access_token(access_token['oauth_token'])
-
-
-		resp, content = client.request('https://%s/oauth?oauth_callback=' % HOST + urllib2.quote('http://github4linux/'), 'GET')
-
-       		data = dict(urlparse.parse_qsl(content))
-
-      		self.oauth_token = data['oauth_token']
-        	self.oauth_secret = data['oauth_token_secret']
-
-        	return 'http://%s/OAuth.action?oauth_token=' % HOST + urllib.quote(data['oauth_token'])
-=======
 			request_token_url = "https://api.github.com"
 			authorize_url = "https://github.com/login/oauth/authorize"
 			redirect_uri = "http://github4linux.com"
@@ -183,20 +182,24 @@ class Ui_MainWindow(object):
 
 			client = oauth.Client(consumer)
 			resp, content = client.request(request_token_url, "GET")
-			print resp
-			print content
+			print "resp: ",resp
+			print "content: ",content
 			
 			if resp['status'] != '200':
     				raise Exception("Invalid response %s." % resp['status'])
 
 			request_token = dict(urlparse.parse_qsl(content))
+			print "request token:", request_token
 			
 			print "Go to the following link in your browser:"
 			print "%s?client_id=%s&scope=repo&redirect_uri=%s" % (authorize_url,consumer_key, redirect_uri)
 
-			
-			
->>>>>>> 9897a30c5239a891e3fd5084a38f6aa36db386a8
+
+			print "GOTO: "
+			print "%s?client_id=%s&scope=user,public_repo" % (authorize_url,consumer_key) # buradaki adresi herhangi bir tarayicida yazdıgimizda uygulama icin
+													# izin isteniyor. İzin verdikten sonra uygulamayi kullanan kullanici
+													# sayisi artiyor.			
+
 
 	def retranslateUi(self, MainWindow):
        		 MainWindow.setWindowTitle(QtGui.QApplication.translate("MainWindow", "MainWindow", None, QtGui.QApplication.UnicodeUTF8))

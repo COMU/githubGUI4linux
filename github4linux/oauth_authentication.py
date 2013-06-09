@@ -139,19 +139,6 @@ class Ui_MainWindow(object):
 			print "%s?client_id=%s&scope=user" % (authorize_url,client_id) # buradaki adresi herhangi bir tarayicida yazdigimizda uygulama icin
 													# izin isteniyor. izin verdikten sonra uygulamayi kullanan kullanici
 													# sayisi artiyor.			
-			header = {'content-type':'application/json'}
-
-			res2 = requests.post(
-    				access_token_url, 
-    				data=json.dumps({
-        			'client_id':client_id, 
-        			'client_secret':client_secret,
-        			'code':code
-    					})
-					 )
-			j2 = json.loads(res2.text)
-			print "j2: ", j2
-
 
 		#	print "Go to the following link in your browser:"
 		#	print "%s?client_id=%s&scope=repo&redirect_uri=%s" % (authorize_url,consumer_key, redirect_uri)

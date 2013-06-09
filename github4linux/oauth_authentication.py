@@ -8,7 +8,7 @@ import requests
 import getpass
 import json
 import time
-from common import consumer_key, consumer_secret, host
+from common import client_id, client_secret, code
 
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
@@ -134,19 +134,30 @@ class Ui_MainWindow(object):
 			authorize_url = "https://github.com/login/oauth/authorize"
 			redirect_uri = "https://github4linux.com/oauth/callback"
 			access_token_url = "https://github.com/login/oauth/access_token"
-	 	
-		#	print "Go to the following link in your browser:"
-		#	print "%s?client_id=%s&scope=repo&redirect_uri=%s" % (authorize_url,consumer_key, redirect_uri)
-
-
+			
 			print "GOTO: "
-			print "%s?client_id=%s&scope=user" % (authorize_url,consumer_key) # buradaki adresi herhangi bir tarayicida yazdigimizda uygulama icin
+			print "%s?client_id=%s&scope=user" % (authorize_url,client_id) # buradaki adresi herhangi bir tarayicida yazdigimizda uygulama icin
 													# izin isteniyor. izin verdikten sonra uygulamayi kullanan kullanici
 													# sayisi artiyor.			
+			header = {'content-type':'application/json'}
+
+			res2 = requests.post(
+    				access_token_url, 
+    				data=json.dumps({
+        			'client_id':client_id, 
+        			'client_secret':client_secret,
+        			'code':code
+    					})
+					 )
+			j2 = json.loads(res2.text)
+			print "j2: ", j2
 
 
+		#	print "Go to the following link in your browser:"
+		#	print "%s?client_id=%s&scope=repo&redirect_uri=%s" % (authorize_url,consumer_key, redirect_uri)
+			
 	def retranslateUi(self, MainWindow):
-       		 MainWindow.setWindowTitle(QtGui.QApplication.translate("MainWindow", "MainWindow", None, QtGui.QApplication.UnicodeUTF8))
+       		 MainWindow.setWindowTitle(QtGui.QApplication.translate("MainWindow", "githubGUI4linux", None, QtGui.QApplication.UnicodeUTF8))
        		 self.label_2.setText(QtGui.QApplication.translate("MainWindow", "<html><head/><body><p align=\"center\"><span style=\" font-size:20pt; font-weight:600;\">Welcome To Github4Linux</span></p></body></html>", None, QtGui.QApplication.UnicodeUTF8))
        		 self.label_3.setText(QtGui.QApplication.translate("MainWindow", "<html><head/><body><p><span style=\" font-size:14pt; font-weight:600;\">connect to github</span></p></body></html>", None, QtGui.QApplication.UnicodeUTF8))
        		 self.label_4.setText(QtGui.QApplication.translate("MainWindow", "<html><head/><body><p>Github Username:</p></body></html>", None, QtGui.QApplication.UnicodeUTF8))

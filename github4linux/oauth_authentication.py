@@ -73,7 +73,7 @@ class Ui_MainWindow(object):
 
         	self.retranslateUi(MainWindow)
         	QtCore.QObject.connect(self.pushButton_2, QtCore.SIGNAL(_fromUtf8("clicked()")), MainWindow.close)
-        	QtCore.QObject.connect(self.pushButton,QtCore.SIGNAL("clicked()"),self.getUserData)
+        	QtCore.QObject.connect(self.pushButton,QtCore.SIGNAL("clicked()"),self.authentication)
         	QtCore.QObject.connect(self.lineEdit,QtCore.SIGNAL("returnPressed()"),self.pushButton.animateClick)
         	QtCore.QObject.connect(self.lineEdit_2,QtCore.SIGNAL("returnPressed()"),self.pushButton.animateClick)
 
@@ -84,7 +84,7 @@ class Ui_MainWindow(object):
 
 # kullanici tarafindan arayuzden girilen kullanici adi ve parolasinin alinip boyle bir kullanicinin var olup olmadiginin sorusturulmasi
 
-	def getUserData(self):
+	def authentication(self):
 		flag = 1	
 	        # kullanici adi ve parolasi alinarak token degeri elde ediliyor.
 	        github_api = "https://api.github.com"
@@ -123,19 +123,21 @@ class Ui_MainWindow(object):
 		                data = json.dumps(payload),
 		                )
 		        j = json.loads(res.text)
-			if res.status_code >= 400:
+			if res.status_code >= 400: 
         			msg = j.get('message', 'UNDEFINED ERROR (no error description from server)')
         			print 'ERROR: %s' % msg
         			return
 			print "J: ",j
-		        oauth_token = j['token']
+		        oauth_token = j['token'] # oauth token degeri elde ediliyor.
 		        print "oauth token : ",oauth_token
 
+	# istekte bulunabilecegimiz github oauth adreslerinin tamami
 			request_token_url = "https://api.github.com"
 			authorize_url = "https://github.com/login/oauth/authorize"
 			redirect_uri = "https://github4linux.com/oauth/callback"
 			access_token_url = "https://github.com/login/oauth/access_token"
-			
+
+	# uygulama icin tarayicidan acilmasi gereken adres otomatik olarak tarayicida gosteriliyor.		
 			new = 2	
 			url = "%s?client_id=%s&scope=user" % (authorize_url,client_id) 
 			webbrowser.open(url,new=new)

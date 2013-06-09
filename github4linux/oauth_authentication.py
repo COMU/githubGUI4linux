@@ -8,6 +8,7 @@ import requests
 import getpass
 import json
 import time
+import webbrowser
 from common import client_id, client_secret, code
 
 try:
@@ -135,11 +136,10 @@ class Ui_MainWindow(object):
 			redirect_uri = "https://github4linux.com/oauth/callback"
 			access_token_url = "https://github.com/login/oauth/access_token"
 			
-			print "GOTO: "
-			print "%s?client_id=%s&scope=user" % (authorize_url,client_id) # buradaki adresi herhangi bir tarayicida yazdigimizda uygulama icin
-													# izin isteniyor. izin verdikten sonra uygulamayi kullanan kullanici
-													# sayisi artiyor.			
-
+			new = 2	
+			url = "%s?client_id=%s&scope=user" % (authorize_url,client_id) 
+			webbrowser.open(url,new=new)
+		
 		#	print "Go to the following link in your browser:"
 		#	print "%s?client_id=%s&scope=repo&redirect_uri=%s" % (authorize_url,consumer_key, redirect_uri)
 			

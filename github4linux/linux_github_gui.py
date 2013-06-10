@@ -275,7 +275,7 @@ class UserPageWindow(QtGui.QMainWindow):
     def organizationItem_chosen(self):
 	colmIndex = 0
 	text = self.organizationlistBox.currentItem().text(colmIndex)
-	
+	print text
 
         icon1 = QtGui.QIcon()
         icon1.addPixmap(QtGui.QPixmap(_fromUtf8("pictures/repo.gif")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
@@ -297,33 +297,51 @@ class UserPageWindow(QtGui.QMainWindow):
 	px = 30
         py = 30
         pz = 20
+	self.frame_2 = QtGui.QFrame(self.tab)
+        self.frame_2.setGeometry(QtCore.QRect(10,a,x,y1))
+        self.frame_2.setFrameShape(QtGui.QFrame.StyledPanel)
+        self.frame_2.setFrameShadow(QtGui.QFrame.Raised)
+        self.frame_2.setObjectName(_fromUtf8("frame_2"))
+        self.pushButton= QtGui.QPushButton(self.frame_2)
+	self.pushButton.move(250,0)
+        self.pushButton.setText("clone")
+        #QtCore.QObject.connect(self.pushButton, QtCore.SIGNAL(_fromUtf8("clicked()")), self.clone())
 
-        self.github = github(self)
-        user = self.github.user()
+        self.label2 = QtGui.QLabel(self.frame_2)
+        #self.label2.setGeometry(QtCore.QRect(20,80,370,y2 )) 
+        self.label2.setText(text)
+        self.label2.move(50,0)
+        self.frame_2.show()
+        self.label2.show()
+        self.pushButton.show()
+	QtCore.QObject.connect(self.pushButton, QtCore.SIGNAL(_fromUtf8("clicked()")), self.clone)
+
+        #self.github = github(self)
+        #user = self.github.user()
 	#clone_url = self.github.clone_url()
-        print type(user.login)
+        #print type(user.login)
 	
-        if self.organizationlistBox.topLevelItem(1).text(colmIndex) :
-	     self.github = github(self)
-             user = self.github.user()
-             print type(user.login)
-	     repo_url = user.repos_url
-             context = urllib.urlopen(repo_url)
-             context = context.read()
-             context = json.loads(context)
-             for repo_text in context:
+        #if self.organizationlistBox.topLevelItem(1).text(colmIndex) :
+	    # self.github = github(self)
+            # user = self.github.user()
+            # print type(user.login)
+	    # repo_url = user.repos_url
+            # context = urllib.urlopen(repo_url)
+            # context = context.read()
+            # context = json.loads(context)
+            # for repo_text in context:
             # event_url = "https://api.github.com/repos/"+str(user.login)+"/"+str(text)
-                  text2 = repo_text['name']	
+             #     text2 = repo_text['name']	
 	          #self.clone_url = "https://github.com/"+user.login+"/"+str(text2)+".git"
 		  #print clone_url
 		  #user_login = user.login	
-                  self.addlabel2(x,x1,y1,y2,a,text2,px,py,pz)
-	          y1 = y1+1
-		  y2 = y2+1
-		  a = a+30	               
-                  px = px +1
-		  py = py+1
-		  pz = pz +40		
+              #    self.addlabel2(x,x1,y1,y2,a,text2,px,py,pz)
+	       #   y1 = y1+1
+		#  y2 = y2+1
+		 # a = a+30	               
+                 # px = px +1
+		 # py = py+1
+		 # pz = pz +40		
     def addlabel2(self,x,x1,y1,y2,a,text2,px,py,pz):
 	print str(text2)
         self.frame_2 = QtGui.QFrame(self.tab)
@@ -345,9 +363,10 @@ class UserPageWindow(QtGui.QMainWindow):
         self.frame_2.show()
         self.label2.show()
         self.pushButton.show()
+	print "mer"	
 	
 	QtCore.QObject.connect(self.pushButton, QtCore.SIGNAL(_fromUtf8("clicked()")), self.clone)
-
+	print "merhaba"
     
 
         #QtCore.QObject.connect(self.pushButton, QtCore.SIGNAL(_fromUtf8("clicked()")), self.clone(clone_url))
@@ -355,9 +374,14 @@ class UserPageWindow(QtGui.QMainWindow):
 	print "merhaba" 	
     def clone(self):    
        #self.clone_url = "https://github.com/"+self.user.login+"/"+str(self.text)+".git" 
-	
-	
-       git.Git().clone("https://github.com/nyucel/learnyouahaskell.git")
+       #print text2
+       #QtCore.QObject.connect(self.pushButton, QtCore.SIGNAL(_fromUtf8("clicked()")), self.clone())
+       colmIndex = 0
+
+       self.github = github(self)
+       user = self.github.user()
+       			
+       git.Git().clone("https://github.com/"+user.login+"/"+self.organizationlistBox.currentItem().text(colmIndex)+".git")
        print "clonelandi"          
     def repoItem_chosen(self):
 	colmIndex = 0

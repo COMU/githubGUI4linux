@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-
+#denemesatirideneme satirii
+#deneme
 # Form implementation generated from reading ui file 'repos.ui'
 # Created: Wed Mar 13 13:02:39 2013
 #      bmmplementation generated from reading ui file 'repos.ui': PyQt4 UI code generator 4.9.1
@@ -350,7 +351,37 @@ class UserPageWindow(QtGui.QMainWindow):
         self.label_2.setText(_fromUtf8(""))
         self.label_2.setPixmap(QtGui.QPixmap(_fromUtf8("pictures/github-logo.png")))
         self.label_2.setObjectName(_fromUtf8("label_2"))
-        self.label_2.show() 
+        self.label_2.show()
+	x = 361
+        x1 = 370
+        y1 = 20
+        y2 = 60
+        a = 30
+        px = 30
+        py = 30
+        pz = 20
+
+#yerel reponun untracked dosyaları goruntunleniyor
+	repo = git.Repo('/home/mehtap/githubGUI4linux/github4linux/')
+	for i in repo.untracked_files:
+		 self.frame_2 = QtGui.QFrame(self.tab2)
+	         self.frame_2.setGeometry(QtCore.QRect(10,a,x,y1))
+        	 self.frame_2.setFrameShape(QtGui.QFrame.StyledPanel)
+        	 self.frame_2.setFrameShadow(QtGui.QFrame.Raised)
+                 self.frame_2.setObjectName(_fromUtf8("frame_2"))
+        	 self.pushButton= QtGui.QPushButton(self.frame_2)
+        	 self.pushButton.move(250,0)
+                 self.pushButton.setText("commit")
+
+                 self.label2 = QtGui.QLabel(self.frame_2)
+                 self.label2.setText(i)
+                 self.label2.move(50,0)
+                 self.frame_2.show()
+                 self.label2.show()
+                 self.pushButton.show()
+ 		 a = a+30
+		 x1 = x1+1
+		 y1 = y1+1 	
         x = 361
 	x1 = 370
         y1 = 20
@@ -395,12 +426,16 @@ class UserPageWindow(QtGui.QMainWindow):
            			y1 = y1 +1
 				y2 = y2 +1
           		  	a = a+30
-                                          			
+				          			
        
 
               				
-       
-    		
+    def tab2(self):
+	
+	file = "/home/mehtap/githubGUI4linux/github4linux/File_Notify.py" 
+    	subprocess.call(["python",file])
+	 	       		
+	    		
     def addlabel(self,y1,y2,text2,x,a,x1,picture):   
         	
         self.frame_2 = QtGui.QFrame(self.tab)

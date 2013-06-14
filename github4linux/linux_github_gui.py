@@ -18,6 +18,9 @@ import requests
 from github import *
 import git
 from configobj import ConfigObj
+import subprocess
+from git import *
+from oauth_authentication2 import *
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
 except AttributeError:
@@ -31,7 +34,11 @@ local_repo_user = []
 value_local = []
 class FindLocalRepoWindow(QtGui.QMainWindow):
     def __init__(self):
-	QtGui.QMainWindow.__init__(self)
+	
+	QtGui.QMainWindow.__init__(self)	
+	
+	auth = Ui_MainWindow()
+	print auth.user()
 	self.setObjectName(_fromUtf8("Adding Local Repos"))
         self.resize(800,600)
         self.centralwidget = QtGui.QWidget(self)
@@ -145,10 +152,19 @@ class FindLocalRepoWindow(QtGui.QMainWindow):
 class github:
 	def __init__(self, ui):
                 self.ui = ui
+		#app = QtGui.QApplication(sys.argv)
+		#window = QtGui.QMainWindow()
+		
+		
         def user(self):
+			
                 gh = GitHub()
-                edit_name = 'nyucel'
+		
+        	edit_name ='nyucel'
+                		  
+			
                 user = gh.users(edit_name).get()
+		print user
                 return user
 	#def clone_url(self):
 	#	self.clone_url = clone_url   	
@@ -392,40 +408,20 @@ class UserPageWindow(QtGui.QMainWindow):
 	user = value_local[0]
 	print "hey"
         print user
-        event_url = "https://api.github.com/repos/"+user+"/"+str(text)+"/events" 
-	print event_url
-	#event_url ="https://api.github.com/repos/nyucel/learnyouahaskell/events"   
-        #print event_url
-	event_icerik = urllib.urlopen(event_url)
-	#print event_icerik
-	event_icerik = event_icerik.read()
-	event_icerik = json.loads(event_icerik)
-	
-        
-	#self.label.setText(text)
-	for event in event_icerik:
-          
-	   
-	  for k in event:
-	       
-	    if k=='payload':
-		  
-               if 'commits' in event[k].keys():
-                            			
-		#if 'message' in event[k]['commits']:
-	            for c in event[k]['commits']:
-				text2 = c['message']
-				
-				url = c['url']	
-				url_icerik = urllib.urlopen(url)
-				url_icerik = url_icerik.read()
-			        url_icerik = json.loads(url_icerik)
-			        picture = url_icerik['author']['avatar_url']
-				self.addlabel(y1,y2,text2,x,a,x1,picture)
-			 	                    
-           			y1 = y1 +1
-				y2 = y2 +1
-          		  	a = a+30
+			 	                   
+	repo = Repo("/home/mehtap/githubGUI4linux/github4linux/")
+	assert repo.bare == False
+	heads = repo.heads
+	master = heads.master
+	log = master.log()
+	for i in log:
+		print i
+		self.listWidget = QtGui.QListWidget(self.tab)
+        	self.listWidget.setGeometry(QtCore.QRect(160, 20,400,600))
+        	self.listWidget.setObjectName(_fromUtf8("listWidget"))
+		item = QtGui.QListWidgetItem(i)	
+		self.listWidget.addItem(item)
+        	self.listWidget.show()	
 				          			
        
 

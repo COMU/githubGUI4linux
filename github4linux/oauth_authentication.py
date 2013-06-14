@@ -10,19 +10,19 @@ import json
 import time
 import webbrowser
 from common import client_id, client_secret, code
+import subprocess
 
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
 except AttributeError:
     _fromUtf8 = lambda s: s
-
-class Ui_MainWindow(object):
+class Ui_MainWindow(QtGui.QMainWindow):
 	def __init__(self):
-		super(Ui_MainWindow, self).__init__()
-	def setupUi(self, MainWindow):
-        	MainWindow.setObjectName(_fromUtf8("MainWindow"))
-        	MainWindow.resize(800, 600)
-        	self.centralwidget = QtGui.QWidget(MainWindow)
+		QtGui.QMainWindow.__init__(self)
+	
+        	self.setObjectName(_fromUtf8("MainWindow"))
+        	self.resize(800, 600)
+        	self.centralwidget = QtGui.QWidget(self)
         	self.centralwidget.setObjectName(_fromUtf8("centralwidget"))
         	self.label = QtGui.QLabel(self.centralwidget)
         	self.label.setGeometry(QtCore.QRect(540, 20, 251, 211))
@@ -62,24 +62,24 @@ class Ui_MainWindow(object):
         	self.uyariLabel = QtGui.QLabel(self.centralwidget)
         	self.uyariLabel.setGeometry(QtCore.QRect(40, 320, 701, 17))
         	self.uyariLabel.setObjectName(_fromUtf8("uyariLabel"))
-        	MainWindow.setCentralWidget(self.centralwidget)
-        	self.menubar = QtGui.QMenuBar(MainWindow)
+        	self.setCentralWidget(self.centralwidget)
+        	self.menubar = QtGui.QMenuBar(self)
         	self.menubar.setGeometry(QtCore.QRect(0, 0, 800, 25))
         	self.menubar.setObjectName(_fromUtf8("menubar"))
-        	MainWindow.setMenuBar(self.menubar)
-        	self.statusbar = QtGui.QStatusBar(MainWindow)
+        	self.setMenuBar(self.menubar)
+        	self.statusbar = QtGui.QStatusBar(self)
         	self.statusbar.setObjectName(_fromUtf8("statusbar"))
-		MainWindow.setStatusBar(self.statusbar)
+		self.setStatusBar(self.statusbar)
 
-        	self.retranslateUi(MainWindow)
-        	QtCore.QObject.connect(self.pushButton_2, QtCore.SIGNAL(_fromUtf8("clicked()")), MainWindow.close)
+        	self.retranslateUi(self)
+        	QtCore.QObject.connect(self.pushButton_2, QtCore.SIGNAL(_fromUtf8("clicked()")),self.close)
         	QtCore.QObject.connect(self.pushButton,QtCore.SIGNAL("clicked()"),self.authentication)
         	QtCore.QObject.connect(self.lineEdit,QtCore.SIGNAL("returnPressed()"),self.pushButton.animateClick)
         	QtCore.QObject.connect(self.lineEdit_2,QtCore.SIGNAL("returnPressed()"),self.pushButton.animateClick)
 
         	self.lineEdit_2.setEchoMode(QtGui.QLineEdit.Password)   # girilen parolanin gorulmesini engellemek icin
 
-        	QtCore.QMetaObject.connectSlotsByName(MainWindow)
+        	QtCore.QMetaObject.connectSlotsByName(self)
 
 
 # kullanici tarafindan arayuzden girilen kullanici adi ve parolasinin alinip boyle bir kullanicinin var olup olmadiginin sorusturulmasi
@@ -88,8 +88,8 @@ class Ui_MainWindow(object):
 		flag = 1	
 	        # kullanici adi ve parolasi alinarak token degeri elde ediliyor.
 	        github_api = "https://api.github.com"
-	        uName = str(ui.lineEdit.text())
-	        pWord = str(ui.lineEdit_2.text())
+	        uName = str(self.lineEdit.text())
+	        pWord = str(self.lineEdit_2.text())
 		
 		try:
 	                userData = "Basic " + (uName + ":" + pWord).encode("base64").rstrip()
@@ -102,12 +102,12 @@ class Ui_MainWindow(object):
 	                req.add_header('Authorization', userData)
 	
 	                res = urllib2.urlopen(req)
-	                ui.lineEdit.clear()
-	                ui.lineEdit_2.clear()
+	                self.lineEdit.clear()
+	                self.lineEdit_2.clear()
 	        except:
-	                ui.uyariLabel.setText(u"internet baglantinizda ya da girdiginiz kullanici adi ve parolasinda hata bulunmaktadir. Kontrol ediniz!")
-	                ui.lineEdit.clear()
-	                ui.lineEdit_2.clear()
+	                self.uyariLabel.setText(u"internet baglantinizda ya da girdiginiz kullanici adi ve parolasinda hata bulunmaktadir. Kontrol ediniz!")
+	                self.lineEdit.clear()
+	                self.lineEdit_2.clear()
 			flag = 0
 
 # github da her kullanici icin kendi hesaplarindaki applications kisminda github tarafindan uygulamaya izin verilir
@@ -141,7 +141,12 @@ class Ui_MainWindow(object):
 			new = 2	
 			url = "%s?client_id=%s&scope=user" % (authorize_url,client_id) 
 			webbrowser.open(url,new=new)
-		
+#		        file = "/home/mehtap/githubGUI4linux/github4linux/linux_github_gui.py"
+#   			subprocess.call(["python",file])
+			
+	def user(self):
+		return self.uName		
+				
 		#	print "Go to the following link in your browser:"
 		#	print "%s?client_id=%s&scope=repo&redirect_uri=%s" % (authorize_url,consumer_key, redirect_uri)
 			
@@ -156,10 +161,7 @@ class Ui_MainWindow(object):
 
 
 app = QtGui.QApplication(sys.argv)
-window = QtGui.QMainWindow()
 ui = Ui_MainWindow()
-ui.setupUi(window)
-
-window.show()
+ui.show()
 sys.exit(app.exec_())
 	

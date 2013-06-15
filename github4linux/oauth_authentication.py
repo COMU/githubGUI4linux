@@ -104,6 +104,7 @@ class Ui_MainWindow(QtGui.QMainWindow):
 	                res = urllib2.urlopen(req)
 	                self.lineEdit.clear()
 	                self.lineEdit_2.clear()
+			self.uyariLabel.clear()
 	        except:
 	                self.uyariLabel.setText(u"internet baglantinizda ya da girdiginiz kullanici adi ve parolasinda hata bulunmaktadir. Kontrol ediniz!")
 	                self.lineEdit.clear()

@@ -141,9 +141,9 @@ class Ui_MainWindow(QtGui.QMainWindow):
 			new = 2	
 			url = "%s?client_id=%s&scope=user" % (authorize_url,client_id) 
 			webbrowser.open(url,new=new)
-#		        file = "/home/mehtap/githubGUI4linux/github4linux/linux_github_gui.py"
-#   			subprocess.call(["python",file])
-			
+		        file = "/home/mehtap/githubGUI4linux/github4linux/linux_github_gui.py"
+   			subprocess.call(["python",file])
+			return self.uName						
 	def user(self):
 		return self.uName		
 				

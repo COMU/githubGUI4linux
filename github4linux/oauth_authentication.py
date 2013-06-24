@@ -12,20 +12,23 @@ import webbrowser
 from common import client_id, client_secret, code
 import subprocess
 
+
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
 except AttributeError:
     _fromUtf8 = lambda s: s
-class Ui_MainWindow(QtGui.QMainWindow):
-	def __init__(self):
-		QtGui.QMainWindow.__init__(self)
+class Ui_MainWindow(object):
+	def setupUi(self,MainWindow):
+		#QtGui.QMainWindow.__init__(self)
+
 	
-        	self.setObjectName(_fromUtf8("MainWindow"))
-        	self.resize(800, 600)
-        	self.centralwidget = QtGui.QWidget(self)
+
+        	MainWindow.setObjectName(_fromUtf8("MainWindow"))
+        	MainWindow.resize(800, 600)
+        	self.centralwidget = QtGui.QWidget(MainWindow)
         	self.centralwidget.setObjectName(_fromUtf8("centralwidget"))
         	self.label = QtGui.QLabel(self.centralwidget)
-        	self.label.setGeometry(QtCore.QRect(540, 20, 251, 211))
+        	#self.label.setGeometry(QtCore.QRect(540, 20, 251, 211))
         	self.label.setText(_fromUtf8(""))
         	self.label.setPixmap(QtGui.QPixmap(_fromUtf8("pictures/github-logo.png")))
         	self.label.setObjectName(_fromUtf8("label"))
@@ -63,15 +66,15 @@ class Ui_MainWindow(QtGui.QMainWindow):
         	self.uyariLabel.setGeometry(QtCore.QRect(40, 320, 701, 17))
         	self.uyariLabel.setObjectName(_fromUtf8("uyariLabel"))
         	self.setCentralWidget(self.centralwidget)
-        	self.menubar = QtGui.QMenuBar(self)
+        	self.menubar = QtGui.QMenuBar(MainWindow)
         	self.menubar.setGeometry(QtCore.QRect(0, 0, 800, 25))
         	self.menubar.setObjectName(_fromUtf8("menubar"))
         	self.setMenuBar(self.menubar)
-        	self.statusbar = QtGui.QStatusBar(self)
+        	self.statusbar = QtGui.QStatusBar(MainWindow)
         	self.statusbar.setObjectName(_fromUtf8("statusbar"))
 		self.setStatusBar(self.statusbar)
 
-        	self.retranslateUi(self)
+        	self.retranslateUi(MainWindow)
         	QtCore.QObject.connect(self.pushButton_2, QtCore.SIGNAL(_fromUtf8("clicked()")),self.close)
         	QtCore.QObject.connect(self.pushButton,QtCore.SIGNAL("clicked()"),self.authentication)
         	QtCore.QObject.connect(self.lineEdit,QtCore.SIGNAL("returnPressed()"),self.pushButton.animateClick)
@@ -79,11 +82,11 @@ class Ui_MainWindow(QtGui.QMainWindow):
 
         	self.lineEdit_2.setEchoMode(QtGui.QLineEdit.Password)   # girilen parolanin gorulmesini engellemek icin
 
-        	QtCore.QMetaObject.connectSlotsByName(self)
+        	QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
 
 # kullanici tarafindan arayuzden girilen kullanici adi ve parolasinin alinip boyle bir kullanicinin var olup olmadiginin sorusturulmasi
-
+		
 	def authentication(self):
 		flag = 1	
 	        # kullanici adi ve parolasi alinarak token degeri elde ediliyor.
@@ -123,6 +126,7 @@ class Ui_MainWindow(QtGui.QMainWindow):
 		                auth = (uName, pWord),
 		                data = json.dumps(payload),
 		                )
+			
 		        j = json.loads(res.text)
 			if res.status_code >= 400: 
         			msg = j.get('message', 'UNDEFINED ERROR (no error description from server)')
@@ -142,16 +146,16 @@ class Ui_MainWindow(QtGui.QMainWindow):
 			new = 2	
 			url = "%s?client_id=%s&scope=user" % (authorize_url,client_id) 
 			webbrowser.open(url,new=new)
-		        file = "/home/mehtap/githubGUI4linux/github4linux/linux_github_gui.py"
-   			subprocess.call(["python",file])
-			return self.uName						
-	def user(self):
-		return self.uName		
+			
+		        #file = "/home/mehtap/githubGUI4linux/github4linux/linux_github_gui.py"
+   			#subprocess.call(["python",file])		     
+                   
 				
 		#	print "Go to the following link in your browser:"
-		#	print "%s?client_id=%s&scope=repo&redirect_uri=%s" % (authorize_url,consumer_key, redirect_uri)
-			
-	def retranslateUi(self, MainWindow):
+		#	print "%s?client_id=%s&scope=repo&redirect_uri=%s" % (authorize_url,consumer_key, redirect_uri)       
+	def name(self):
+		return self.lineEdit.text()		
+	def retranslateUi(self,MainWindow):
        		 MainWindow.setWindowTitle(QtGui.QApplication.translate("MainWindow", "githubGUI4linux", None, QtGui.QApplication.UnicodeUTF8))
        		 self.label_2.setText(QtGui.QApplication.translate("MainWindow", "<html><head/><body><p align=\"center\"><span style=\" font-size:20pt; font-weight:600;\">Welcome To Github4Linux</span></p></body></html>", None, QtGui.QApplication.UnicodeUTF8))
        		 self.label_3.setText(QtGui.QApplication.translate("MainWindow", "<html><head/><body><p><span style=\" font-size:14pt; font-weight:600;\">connect to github</span></p></body></html>", None, QtGui.QApplication.UnicodeUTF8))
@@ -161,8 +165,8 @@ class Ui_MainWindow(QtGui.QMainWindow):
        		 self.pushButton_2.setText(QtGui.QApplication.translate("MainWindow", "SKIP SETUP", None, QtGui.QApplication.UnicodeUTF8))
 
 
-app = QtGui.QApplication(sys.argv)
-ui = Ui_MainWindow()
-ui.show()
-sys.exit(app.exec_())
+#app = QtGui.QApplication(sys.argv)
+#ui = Ui_MainWindow()
+#ui.show()
+#sys.exit(app.exec_())
 	

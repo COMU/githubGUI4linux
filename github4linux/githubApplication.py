@@ -35,7 +35,8 @@ except AttributeError:
 #        def user(self):
 #                gh = GitHub()
                 #edit_name ='nyucel'
-
+#gh = GitHub()
+#user = gh.users('nyucel').get()
 
 class UserPageWindow(object):
     def setupUi(self,Dialog):
@@ -49,12 +50,12 @@ class UserPageWindow(object):
         #QtGui.QMainWindow.__init__(self)
         Dialog.setObjectName(_fromUtf8("Github4Linux"))
         Dialog.resize(800,600)
-        #self.centralwidget = QtGui.QWidget(MainWindow)
-        #self.centralwidget.setObjectName(_fromUtf8("centralwidget"))
+        self.centralwidget = QtGui.QWidget(Dialog)
+        self.centralwidget.setObjectName(_fromUtf8("centralwidget"))
 	#self.local_repo_user = []
 	#self.value_local = []
 	self.localRepoList = []
-	self.label_2 = QtGui.QLabel(Dialog)
+	self.label_2 = QtGui.QLabel(self.centralwidget)
         self.label_2.setGeometry(QtCore.QRect(610, 40,350, 211))
         self.label_2.setText(_fromUtf8(""))
         #self.label_2.setPixmap(QtGui.QPixmap(_fromUtf8("picture/github-logo.png")))
@@ -62,36 +63,35 @@ class UserPageWindow(object):
         self.label_2.show()
   	#self.clone_url = UserPageWindow(QtGui.QMainWindow) 
 	#githubtan depolar
-	gh = GitHub()
-	user = gh.users('nyucel').get()
-	#self.github = github(self)
-        #user = self.github.user()
-        repo_url = user.repos_url
-        context = urllib.urlopen(repo_url)
-        context = context.read()
-        context = json.loads(context)
+	#gh = GitHub()
+	#self.user = gh.users(self.edit_name).get()
+ 	#print self.edit_name 
+	#repo_url = self.user.repos_url
+        #context = urllib.urlopen(repo_url)
+        #context = context.read()
+        #context = json.loads(context)
 	
-	organization_url = user.organizations_url
-	context2 = urllib.urlopen(organization_url)
-        context2 = context2.read()
-        context2 = json.loads(context2)
+	#organization_url = self.user.organizations_url
+	#context2 = urllib.urlopen(organization_url)
+        #context2 = context2.read()
+        #context2 = json.loads(context2)
  
 	self.organizationlistBox = QtGui.QTreeWidget(Dialog)
 	self.organizationlistBox.setGeometry(QtCore.QRect(10,250,150,240))
         self.organizationlistBox.setHeaderLabels(["Organizationlist"])
-        root = QtGui.QTreeWidgetItem(self.organizationlistBox, ["Organizations"])
+       # root = QtGui.QTreeWidgetItem(self.organizationlistBox, ["Organizations"])
 	#print type(root)
 
-        for organization_text in context2:
-             organization = QtGui.QTreeWidgetItem(root, [organization_text['login']])
-	root2 = QtGui.QTreeWidgetItem(self.organizationlistBox, ["Repositories"])
+#        for organization_text in context2:
+#             organization = QtGui.QTreeWidgetItem(root, [organization_text['login']])
+#	root2 = QtGui.QTreeWidgetItem(self.organizationlistBox, ["Repositories"])
 	#print type(root2)
-	repo_url = user.repos_url
-        context = urllib.urlopen(repo_url)
-        context = context.read()
-        context = json.loads(context)
-	for repo_text in context:
-             repo = QtGui.QTreeWidgetItem(root2, [repo_text['name']])
+#	repo_url = self.user.repos_url
+#        context = urllib.urlopen(repo_url)
+#        context = context.read()
+#        context = json.loads(context)
+#	for repo_text in context:
+#             repo = QtGui.QTreeWidgetItem(root2, [repo_text['name']])
 
         self.organizationlistBox.show()
 
@@ -162,8 +162,8 @@ class UserPageWindow(object):
         self.retranslateUi(Dialog)
         QtCore.QMetaObject.connectSlotsByName(Dialog)
        
-	self.repolistBox.itemSelectionChanged.connect(self.displayItem)
-        self.repolistBox.itemSelectionChanged.connect(self.repoItem_chosen)
+#	self.repolistBox.itemSelectionChanged.connect(self.displayItem)
+#        self.repolistBox.itemSelectionChanged.connect(self.repoItem_chosen)
 	self.organizationlistBox.itemSelectionChanged.connect(self.organizationItem_chosen)
 
 
@@ -218,10 +218,8 @@ class UserPageWindow(object):
        colmIndex = 0
        #self.github = github(self)	
        #user = self.github.user()
-       gh = GitHub()
-       user = gh.users('nyucel').get()
 			
-       git.Git().clone("https://github.com/"+user.login+"/"+self.organizationlistBox.currentItem().text(colmIndex)+".git")
+       git.Git().clone("https://github.com/"+self.user.login+"/"+self.organizationlistBox.currentItem().text(colmIndex)+".git")
        print "clonelandi"          
     def repoItem_chosen(self):
 	colmIndex = 0

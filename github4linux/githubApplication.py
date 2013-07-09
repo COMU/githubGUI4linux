@@ -17,81 +17,23 @@ try:
 except AttributeError:
     _fromUtf8 = lambda s: s
 
-#localRepoList = []
-#file_list = []
-#value_list = []
-#array_list = []
-#local_repo_user = []
-#value_local = []
-
-
-#class github:
-#        def __init__(self, ui):
-#                self.ui = ui
-                #app = QtGui.QApplication(sys.argv)
-                #window = QtGui.QMainWindow()
-
-
-#        def user(self):
-#                gh = GitHub()
-                #edit_name ='nyucel'
-#gh = GitHub()
-#user = gh.users('nyucel').get()
 
 class UserPageWindow(object):
     def setupUi(self,Dialog):
-	#localRepoList = []
-	#file_list = []
-	#value_list = []
-	#array_list = []
-	#local_repo_user = []
-	#value_local = []
-	#super(UserPageWindow,self).__init__()
-        #QtGui.QMainWindow.__init__(self)
         Dialog.setObjectName(_fromUtf8("Github4Linux"))
         Dialog.resize(800,600)
         self.centralwidget = QtGui.QWidget(Dialog)
         self.centralwidget.setObjectName(_fromUtf8("centralwidget"))
-	#self.local_repo_user = []
-	#self.value_local = []
 	self.localRepoList = []
 	self.label_2 = QtGui.QLabel(self.centralwidget)
         self.label_2.setGeometry(QtCore.QRect(610, 40,350, 211))
         self.label_2.setText(_fromUtf8(""))
-        #self.label_2.setPixmap(QtGui.QPixmap(_fromUtf8("picture/github-logo.png")))
         self.label_2.setObjectName(_fromUtf8("label_2"))
         self.label_2.show()
-  	#self.clone_url = UserPageWindow(QtGui.QMainWindow) 
-	#githubtan depolar
-	#gh = GitHub()
-	#self.user = gh.users(self.edit_name).get()
- 	#print self.edit_name 
-	#repo_url = self.user.repos_url
-        #context = urllib.urlopen(repo_url)
-        #context = context.read()
-        #context = json.loads(context)
-	
-	#organization_url = self.user.organizations_url
-	#context2 = urllib.urlopen(organization_url)
-        #context2 = context2.read()
-        #context2 = json.loads(context2)
  
 	self.organizationlistBox = QtGui.QTreeWidget(Dialog)
 	self.organizationlistBox.setGeometry(QtCore.QRect(10,250,150,240))
         self.organizationlistBox.setHeaderLabels(["Organizationlist"])
-       # root = QtGui.QTreeWidgetItem(self.organizationlistBox, ["Organizations"])
-	#print type(root)
-
-#        for organization_text in context2:
-#             organization = QtGui.QTreeWidgetItem(root, [organization_text['login']])
-#	root2 = QtGui.QTreeWidgetItem(self.organizationlistBox, ["Repositories"])
-	#print type(root2)
-#	repo_url = self.user.repos_url
-#        context = urllib.urlopen(repo_url)
-#        context = context.read()
-#        context = json.loads(context)
-#	for repo_text in context:
-#             repo = QtGui.QTreeWidgetItem(root2, [repo_text['name']])
 
         self.organizationlistBox.show()
 
@@ -99,12 +41,6 @@ class UserPageWindow(object):
         self.repolistBox = QtGui.QTreeWidget(Dialog)
 	self.repolistBox.setGeometry(QtCore.QRect(10,30,150,200))
 	self.repolistBox.setHeaderLabels(["Repositorylist"])
-        #root = QtGui.QTreeWidgetItem(self.repolistBox, ["Repositories"])
-	#print self.localRepoList 
-	#for i in self.localRepoList:
-	 #   repo = QtGui.QTreeWidgetItem(root,[i])
-	#print "listtttttttttt"
-	#print self.localRepoList 
 	self.repolistBox.show()
         
 	self.pushButton = QtGui.QPushButton(Dialog)
@@ -143,14 +79,6 @@ class UserPageWindow(object):
         
         self.label = QtGui.QLabel(self.tab)
         self.label.setGeometry(QtCore.QRect(20, 30, 141, 201))
-        #self.setCentralWidget(self.centralwidget)
-        #self.menubar = QtGui.QMenuBar(MainWindow)
-        #self.menubar.setGeometry(QtCore.QRect(0, 0, 800, 21))
-        #self.menubar.setObjectName(_fromUtf8("menubar"))
-        #self.setMenuBar(self.menubar)
-        #self.statusbar = QtGui.QStatusBar(MainWindow)
-        #self.statusbar.setObjectName(_fromUtf8("statusbar"))
-        #self.setStatusBar(self.statusbar)
 	
 	self.label_2 = QtGui.QLabel(Dialog)
         self.label_2.setGeometry(QtCore.QRect(610, 40, 241, 211))
@@ -162,8 +90,6 @@ class UserPageWindow(object):
         self.retranslateUi(Dialog)
         QtCore.QMetaObject.connectSlotsByName(Dialog)
        
-#	self.repolistBox.itemSelectionChanged.connect(self.displayItem)
-#        self.repolistBox.itemSelectionChanged.connect(self.repoItem_chosen)
 	self.organizationlistBox.itemSelectionChanged.connect(self.organizationItem_chosen)
 
 
@@ -293,7 +219,6 @@ class UserPageWindow(object):
 	event_icerik = json.loads(event_icerik)
 
         
-	#self.label.setText(text)
 	for event in event_icerik:
           
 
@@ -329,16 +254,10 @@ class UserPageWindow(object):
         self.frame_2.setFrameShape(QtGui.QFrame.StyledPanel)
         self.frame_2.setFrameShadow(QtGui.QFrame.Raised)
         self.frame_2.setObjectName(_fromUtf8("frame_2"))
-        #self.pushButton= QtGui.QPushButton(self.tab)
-
-	#self.pushButton.setGeometry(QtCore.QRect(370,30,30,20))
-	#self.pushButton.setObjectName(_fromUtf8("pushButton"))
 	self.label2 = QtGui.QLabel(self.frame_2)
-        #self.label2.setGeometry(QtCore.QRect(20,80,370,y2 )) 
 	self.label2.setText(text2)
 
 	self.listWidget = QtGui.QListWidget(self.frame_2)
-        #self.listWidget.setGeometry(QtCore.QRect(10, 360, 41, 31))
         self.listWidget.setObjectName(_fromUtf8("listWidget"))
         self.listWidget.resize(30,20)
 
@@ -351,7 +270,6 @@ class UserPageWindow(object):
         item.setIcon(QtGui.QIcon(image))
 
         self.listWidget2 = QtGui.QListWidget(self.frame_2)
-        #self.listWidget.setGeometry(QtCore.QRect(10, 360, 41, 31))
         self.listWidget2.setObjectName(_fromUtf8("listWidget2"))
         self.listWidget2.resize(30,20)
 
@@ -363,15 +281,9 @@ class UserPageWindow(object):
         item.setIcon(QtGui.QIcon(image2))
         self.listWidget2.setGeometry(QtCore.QRect(10, 30, 360, 20))
 
-#       self.label4 = QtGui.QLabel(self.frame_2)
-#	pixmap = QtGui.QPixmap("ok.jpg")
-#	self.label4.setPixmap(pixmap)
-#       self.label4.move(80,0) 
 	self.label2.move(50,0)
 	self.frame_2.show()
 	self.label2.show()
-        #self.pushButton.show()
-#       self.label4.show()    
 
 	 		 
         

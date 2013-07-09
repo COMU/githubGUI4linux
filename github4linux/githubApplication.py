@@ -185,8 +185,15 @@ class UserPageWindow(object):
         self.github = github(self)
         print self.github.user()
 	#yerel repo uncommit files
-	repo = git.Repo('/home/mehtap/githubGUI4linux/github4linux/')
-	
+	#repo = git.Repo('/home/mehtap/githubGUI4linux/github4linux/')
+	home = commands.getoutput('~/') # kullanicinin home dizinini buluruz.
+        home_name = home.split(" ")
+        home_name = home_name[2].split(":")
+        home = home_name[0]
+
+        print home
+
+	repo = git.Repo(home+'githubGUI4linux/github4linux/')
         for i in repo.untracked_files:
                  self.frame_2 = QtGui.QFrame(self.tab2)
                  self.frame_2.setGeometry(QtCore.QRect(10,b,x,y3))

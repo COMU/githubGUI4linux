@@ -149,7 +149,10 @@ class Ui_MainWindow(object):
 			
 		        #file = "/home/mehtap/githubGUI4linux/github4linux/linux_github_gui.py"
    			#subprocess.call(["python",file])		     
-                   
+	
+	                #url = "%soauth_token=%s" % (authorize_url,oauth_token) # bu kod calistigi zaman github hesabin baskasi tarafindan ele gecirildigini zannedip parolanin yenilenmesini istiyor ve sizi otomatik olarak github'in parola yenileme sayfasina gonderiyor.
+                        #webbrowser.open(url,new=new)
+   
 				
 		#	print "Go to the following link in your browser:"
 		#	print "%s?client_id=%s&scope=repo&redirect_uri=%s" % (authorize_url,consumer_key, redirect_uri)       

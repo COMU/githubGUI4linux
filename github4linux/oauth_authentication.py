@@ -17,6 +17,8 @@ try:
     _fromUtf8 = QtCore.QString.fromUtf8
 except AttributeError:
     _fromUtf8 = lambda s: s
+
+uName = []
 class Ui_MainWindow(object):
 	def setupUi(self,MainWindow):
 		#QtGui.QMainWindow.__init__(self)
@@ -91,11 +93,11 @@ class Ui_MainWindow(object):
 		flag = 1	
 	        # kullanici adi ve parolasi alinarak token degeri elde ediliyor.
 	        github_api = "https://api.github.com"
-	        uName = str(self.lineEdit.text())
+	        uName.append(str(self.lineEdit.text()))
 	        pWord = str(self.lineEdit_2.text())
 		
 		try:
-	                userData = "Basic " + (uName + ":" + pWord).encode("base64").rstrip()
+	                userData = "Basic " + (uName[0] + ":" + pWord).encode("base64").rstrip()
 	
 	                req = urllib2.Request('https://api.github.com/users/braitsch')
 	
@@ -110,7 +112,7 @@ class Ui_MainWindow(object):
 			self.uyariLabel.clear()
 	        except:
 	                self.uyariLabel.setText(u"internet baglantinizda ya da girdiginiz kullanici adi ve parolasinda hata bulunmaktadir. Kontrol ediniz!")
-	                self.lineEdit.clear()
+	               # self.lineEdit.clear()
 	                self.lineEdit_2.clear()
 			flag = 0
 
@@ -123,7 +125,7 @@ class Ui_MainWindow(object):
 		                payload['note'] = note
 		        res = requests.post(
 		                url,
-		                auth = (uName, pWord),
+		                auth = (uName[0], pWord),
 		                data = json.dumps(payload),
 		                )
 			
@@ -149,12 +151,15 @@ class Ui_MainWindow(object):
 			
 		        #file = "/home/mehtap/githubGUI4linux/github4linux/linux_github_gui.py"
    			#subprocess.call(["python",file])		     
-                   
+	
+	                #url = "%soauth_token=%s" % (authorize_url,oauth_token) # bu kod calistigi zaman github hesabin baskasi tarafindan ele gecirildigini zannedip parolanin yenilenmesini istiyor ve sizi otomatik olarak github'in parola yenileme sayfasina gonderiyor.
+                        #webbrowser.open(url,new=new)
+   
 				
 		#	print "Go to the following link in your browser:"
 		#	print "%s?client_id=%s&scope=repo&redirect_uri=%s" % (authorize_url,consumer_key, redirect_uri)       
 	def name(self):
-		return self.lineEdit.text()		
+		return uName[0]		
 	def retranslateUi(self,MainWindow):
        		 MainWindow.setWindowTitle(QtGui.QApplication.translate("MainWindow", "githubGUI4linux", None, QtGui.QApplication.UnicodeUTF8))
        		 self.label_2.setText(QtGui.QApplication.translate("MainWindow", "<html><head/><body><p align=\"center\"><span style=\" font-size:20pt; font-weight:600;\">Welcome To Github4Linux</span></p></body></html>", None, QtGui.QApplication.UnicodeUTF8))

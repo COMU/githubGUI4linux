@@ -28,8 +28,8 @@ class Pencere(QtGui.QDialog, FindLocalRepoWindow):
 		
                 self.digerPencere.exec_()
 	def repoItem_chosen(self):
-        	colmIndex = 0
-        	text = self.digerPencere.repolistBox.currentItem().text(colmIndex)
+        	 colmIndex = 0
+        	 text = self.digerPencere.repolistBox.currentItem().text(colmIndex)
 
        		 #icon1 = QtGui.QIcon()
        		 #icon1.addPixmap(QtGui.QPixmap(_fromUtf8("pictures/history.gif")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
@@ -73,11 +73,20 @@ class Pencere(QtGui.QDialog, FindLocalRepoWindow):
 
 	def BackText(self):
 		self.nesne = MainWindow()
-		self.digerPencere.edit_name = self.nesne.lineEdit.text()	
+		isim = self.nesne.name()
+		print "isim isim isim isim"
+		print isim
+		#self.digerPencere.edit_name = 
+		#print self.nesne.lineEdit.text()
+		#print self.digerPencere.edit_name	
 		gh = GitHub()
-	        user = gh.users(self.digerPencere.edit_name).get()
-        	
+		#print "bu"
+		#print "'"+self.digerPencere.edit_name+"'"
+	        #user = gh.users('"'+self.digerPencere.edit_name+'"').get()
+        	user = gh.users(isim).get()
+		print user
         	repo_url = user.repos_url
+		print repo_url
         	context = urllib.urlopen(repo_url)
        		context = context.read()
         	context = json.loads(context)
@@ -88,7 +97,7 @@ class Pencere(QtGui.QDialog, FindLocalRepoWindow):
         	context2 = json.loads(context2)
 
 		print "merak ettigim isim"	
-                print self.digerPencere.edit_name  
+                #print self.digerPencere.edit_name  
 		root = QtGui.QTreeWidgetItem(self.digerPencere.organizationlistBox, ["Organizations"])
 	        #print type(root)
 

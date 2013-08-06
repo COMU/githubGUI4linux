@@ -8,6 +8,13 @@ from githubApplication  import UserPageWindow as DigerPencere
 from oauth_authentication import Ui_MainWindow
 from github import *
 import sys
+from git import *
+import git
+
+try:
+    _fromUtf8 = QtCore.QString.fromUtf8
+except AttributeError:
+    _fromUtf8 = lambda s: s
 
 
 class DigerPencerem(QtGui.QDialog, DigerPencere):
@@ -47,8 +54,8 @@ class Pencere(QtGui.QDialog, FindLocalRepoWindow):
         	 self.digerPencere.tab3.setObjectName(_fromUtf8("tab3"))
        		 self.digerPencere.tabWidget.addTab(self.digerPencere.tab, _fromUtf8("HISTORY"))
        		 self.digerPencere.tabWidget.addTab(self.digerPencere.tab2,_fromUtf8("CHANGES"))
-       		 self.digerPencere.tabWidget.addTab(self.tab3,_fromUtf8("BRANCHES"))
-       		 self.digerPencere.label_2 = QtGui.QLabel(Dialog)
+       		 self.digerPencere.tabWidget.addTab(self.digerPencere.tab3,_fromUtf8("BRANCHES"))
+       		 self.digerPencere.label_2 = QtGui.QLabel()
        		 self.digerPencere.label_2.setGeometry(QtCore.QRect(510, 40, 241, 211))
        		 self.digerPencere.label_2.setText(_fromUtf8(""))
        		 self.digerPencere.label_2.setPixmap(QtGui.QPixmap(_fromUtf8("pictures/github-logo.png")))
@@ -66,11 +73,25 @@ class Pencere(QtGui.QDialog, FindLocalRepoWindow):
        		 repo = git.Repo('/home/mehtap/githubGUI4linux/github4linux/')
 
        		 for i in repo.untracked_files:
-                	 self.digerPencere.frame_2 = QtGui.QFrame(self.tab2)
+			 print "untracked files" 
+                	 self.digerPencere.frame_2 = QtGui.QFrame(self.digerPencere.tab2)
                    	 self.digerPencere.frame_2.setGeometry(QtCore.QRect(10,b,x,y3))
                  	 self.digerPencere.frame_2.setFrameShape(QtGui.QFrame.StyledPanel)
                  	 self.digerPencere.frame_2.setFrameShadow(QtGui.QFrame.Raised)
+			 self.digerPencere.frame_2.setObjectName(_fromUtf8("frame_2"))
+                 	 self.digerPencere.pushButton= QtGui.QPushButton(self.digerPencere.frame_2)
+                  	 self.digerPencere.pushButton.move(250,0)
+                 	 self.digerPencere.pushButton.setText("commit")
 
+                 	 self.digerPencere.label2 = QtGui.QLabel(self.digerPencere.frame_2)
+                 	 self.digerPencere.label2.setText(i)
+                 	 self.digerPencere.label2.move(50,0)
+		 	 self.digerPencere.frame_2.show()
+                 	 self.digerPencere.label2.show()
+                 	 self.digerPencere.pushButton.show()
+                 	 y3 = y3 +1
+                 	 b = b+30 
+			 print "untracked end"	
 	def BackText(self):
 		self.nesne = MainWindow()
 		isim = self.nesne.name()

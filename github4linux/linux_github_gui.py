@@ -34,13 +34,13 @@ local_repo_user = []
 value_local = []
 
 class FindLocalRepoWindow(object):
-    def setupUi(self,MainWindow):
+    def setupUi(self,Dialog):
 	
 	#QtGui.QMainWindow.__init__(self)	
 
-	MainWindow.setObjectName(_fromUtf8("Adding Local Repos"))
-        MainWindow.resize(800,600)
-        self.centralwidget = QtGui.QWidget(MainWindow)
+	Dialog.setObjectName(_fromUtf8("Adding Local Repos"))
+        Dialog.resize(800,600)
+        self.centralwidget = QtGui.QWidget(Dialog)
         self.centralwidget.setObjectName(_fromUtf8("centralwidget"))
 	self.label = QtGui.QLabel(self.centralwidget)
         self.label.setGeometry(QtCore.QRect(50, 70, 251, 31))
@@ -60,14 +60,14 @@ class FindLocalRepoWindow(object):
         self.listWidget = QtGui.QListWidget(self.centralwidget)
         self.listWidget.setGeometry(QtCore.QRect(50, 150, 401, 151))
         self.listWidget.setObjectName(_fromUtf8("listWidget"))
-        self.setCentralWidget(self.centralwidget)
-        self.menubar = QtGui.QMenuBar(MainWindow)
+        #self.setCentralWidget(self.centralwidget)
+        self.menubar = QtGui.QMenuBar(Dialog)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 800, 25))
         self.menubar.setObjectName(_fromUtf8("menubar"))
-        self.setMenuBar(self.menubar)
-        self.statusbar = QtGui.QStatusBar(MainWindow)
+        #self.setMenuBar(self.menubar)
+        self.statusbar = QtGui.QStatusBar(Dialog)
         self.statusbar.setObjectName(_fromUtf8("statusbar"))
-        self.setStatusBar(self.statusbar)
+        #self.setStatusBar(self.statusbar)
 	
 
 	# program kuruldugunda, kullanicinin yerelinde otomatik olarak bir dizin olusturuluyor
@@ -105,7 +105,7 @@ class FindLocalRepoWindow(object):
 		self.listWidget.addItem(array[3])
 	        
 
-        self.retranslateUi(MainWindow)
+        self.retranslateUi(Dialog)
 	
 	#self.listWidget.itemActivated.connect(self.listWidget.currentItem())
 	self.connect(self.listWidget, QtCore.SIGNAL("itemSelectionChanged()"), self.printItemText)
@@ -142,8 +142,8 @@ class FindLocalRepoWindow(object):
 	self.new.show()
         
 
-    def retranslateUi(self, MainWindow):
-        MainWindow.setWindowTitle(QtGui.QApplication.translate("MainWindow", "Add Your Local Repository for githubgui4linux", None, QtGui.QApplication.UnicodeUTF8))
+    def retranslateUi(self,Dialog):
+        Dialog.setWindowTitle(QtGui.QApplication.translate("MainWindow", "Add Your Local Repository for githubgui4linux", None, QtGui.QApplication.UnicodeUTF8))
         self.label.setText(QtGui.QApplication.translate("MainWindow", "<html><head/><body><p><span style=\" font-size:16pt; font-weight:600;\">Find Local Repositories</span></p></body></html>", None, QtGui.QApplication.UnicodeUTF8))
                                                            
 	self.pushButton.setText(QtGui.QApplication.translate("MainWindow", "ADD SELECTED", None, QtGui.QApplication.UnicodeUTF8))

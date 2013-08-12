@@ -24,8 +24,15 @@ class UserPageWindow(object):
         Dialog.resize(800,600)
         self.centralwidget = QtGui.QWidget(Dialog)
         self.centralwidget.setObjectName(_fromUtf8("centralwidget"))
+	self.gridLayoutWidget = QtGui.QWidget(self.centralwidget)
+        self.gridLayoutWidget.setGeometry(QtCore.QRect(190, 50, 301, 331))
+        self.gridLayoutWidget.setObjectName(_fromUtf8("gridLayoutWidget"))
+        self.gridLayout_2 = QtGui.QGridLayout(self.gridLayoutWidget)
+        self.gridLayout_2.setMargin(0)
+        self.gridLayout_2.setObjectName(_fromUtf8("gridLayout_2"))
+
 	self.localRepoList = []
-	self.label_2 = QtGui.QLabel(self.centralwidget)
+	self.label_2 = QtGui.QLabel(self.gridLayoutWidget)
         self.label_2.setGeometry(QtCore.QRect(610, 40,350, 211))
         self.label_2.setText(_fromUtf8(""))
         self.label_2.setObjectName(_fromUtf8("label_2"))
